@@ -4,6 +4,9 @@
 *.translation
 export_presets.cfg
 
+# godot-cpp (clone per AGENT_1: git clone -b 4.3 https://github.com/godotengine/godot-cpp.git simulation/gdextension/godot-cpp)
+simulation/gdextension/godot-cpp/
+
 # C++ build artifacts
 *.o
 *.obj

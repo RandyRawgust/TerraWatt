@@ -1,12 +1,45 @@
-[gd_scene load_steps=2 format=3 uid="uid://bqj8mainterra001"]
+[gd_scene load_steps=10 format=3 uid="uid://bqj8mainterra001"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_main"]
+[ext_resource type="PackedScene" uid="uid://b8hudterrawatt01" path="res://ui/hud.tscn" id="2_hud"]
+[ext_resource type="Script" path="res://player/player.gd" id="3_player"]
+[ext_resource type="Script" path="res://player/player_status.gd" id="4_pstatus"]
+[ext_resource type="PackedScene" uid="uid://crabbitterra01" path="res://creatures/rabbit.tscn" id="5_rabbit"]
+[ext_resource type="PackedScene" uid="uid://cbirdterra0001" path="res://creatures/bird.tscn" id="6_bird"]
+[ext_resource type="PackedScene" uid="uid://cwolfterra001" path="res://creatures/wolf.tscn" id="7_wolf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
+size = Vector2(4800, 48)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
 
 [node name="WorldRenderer" type="Node2D" parent="."]
 
-[node name="Player" type="Node2D" parent="."]
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(960, 640)
 
-[node name="HUD" type="Node2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+shape = SubResource("RectangleShape2D_ground")
+
+[node name="Player" type="Node2D" parent="."]
+position = Vector2(960, 580)
+script = ExtResource("3_player")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+enabled = true
+position_smoothing_enabled = true
+
+[node name="PlayerStatus" type="Node" parent="Player"]
+script = ExtResource("4_pstatus")
+
+[node name="HUD" parent="." instance=ExtResource("2_hud")]
+
+[node name="Rabbit" parent="." instance=ExtResource("5_rabbit")]
+position = Vector2(780, 608)
+
+[node name="Bird" parent="." instance=ExtResource("6_bird")]
+position = Vector2(1100, 380)
+
+[node name="Wolf" parent="." instance=ExtResource("7_wolf")]
+position = Vector2(1420, 608)

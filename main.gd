@@ -7,7 +7,9 @@ extends Node2D
 func _ready() -> void:
 	print("Terra.Watt — Initializing...")
 	# Systems initialize via their own _ready() calls as autoloads.
-	# Main scene wires them together here once all agents deliver.
+	# Demo inventory so the hotbar shows counts (replace when mining loop is wired).
+	if Inventory.get_count("coal") == 0:
+		Inventory.add_item("coal", 3)
 	print("Terra.Watt — Ready. Open main.tscn in Godot to run.")
 
 func _process(delta: float) -> void:

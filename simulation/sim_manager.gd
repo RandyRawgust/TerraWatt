@@ -1,30 +1,68 @@
 # SYSTEM: Pixel Simulation
-# AGENT: Pixel Sim Agent (stub created by Foundation Agent)
-# PURPOSE: Manages the cellular automata simulation layer.
-# The real implementation uses a C++ GDExtension for performance.
-# STUB VERSION — replace when Pixel Sim Agent delivers the extension.
+# AGENT: Pixel Sim Agent
+# PURPOSE: GDScript wrapper integrating C++ SimCore (TerrawattSimNode) with the scene tree.
 
 extends Node
 
 class_name SimManager
 
-# Called every physics tick to step the simulation forward.
-# STUB: does nothing until GDExtension is loaded.
-func step_simulation(delta: float) -> void:
-	pass
+var _sim_node: Node = null
+var _is_loaded: bool = false
 
-# Returns the simulation cell data at world tile position (x, y).
-# Returns material_id=0 (air) until simulation is running.
+func _ready() -> void:
+	_try_load_extension()
+
+func _try_load_extension() -> void:
+	if ClassDB.class_exists("TerrawattSimNode"):
+		_sim_node = ClassDB.instantiate("TerrawattSimNode")
+		add_child(_sim_node)
+		_sim_node.cells_updated.connect(_on_cells_updated)
+		_is_loaded = true
+		print("SimManager: C++ extension loaded successfully.")
+	else:
+		push_warning("SimManager: TerrawattSimNode not found. Using GDScript fallback.")
+		_is_loaded = false
+
+func _physics_process(_delta: float) -> void:
+	if _is_loaded and _sim_node:
+		_sim_node.step(_delta)
+
+## Legacy API (Foundation stub); forwards to the simulation step (driven by _physics_process).
+func step_simulation(delta: float) -> void:
+	if _is_loaded and _sim_node:
+		_sim_node.step(delta)
+
+func get_sim_node() -> Node:
+	return _sim_node
+
+func get_sim_width() -> int:
+	if _is_loaded and _sim_node:
+		return _sim_node.get_sim_width()
+	return 0
+
+func get_sim_height() -> int:
+	if _is_loaded and _sim_node:
+		return _sim_node.get_sim_height()
+	return 0
+
 func get_cell(x: int, y: int) -> Dictionary:
+	if _is_loaded and _sim_node:
+		return {
+			"material_id": _sim_node.get_cell_material(x, y),
+			"temperature": _sim_node.get_cell_temperature(x, y),
+			"flags": _sim_node.get_cell_flags(x, y),
+		}
 	return {"material_id": 0, "temperature": 0.0, "flags": 0}
 
-# Sets a simulation cell to a specific material.
 func set_cell(x: int, y: int, material_id: int) -> void:
-	pass
+	if _is_loaded and _sim_node:
+		_sim_node.set_cell_material(x, y, material_id)
 
-# Spawns a particle of material_id at world position (x, y).
 func add_particle(x: int, y: int, material_id: int) -> void:
-	pass
+	if _is_loaded and _sim_node:
+		_sim_node.add_particle(x, y, material_id)
 
-# Emitted when a cell's material changes.
+func _on_cells_updated(region: Rect2i) -> void:
+	cell_changed.emit(region.position.x, region.position.y, 0)
+
 signal cell_changed(x: int, y: int, material_id: int)

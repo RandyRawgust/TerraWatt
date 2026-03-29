@@ -88,17 +88,25 @@ EXPORTS:
 
 ---
 
-## UI & Creatures Agent — [DATE]
-STATUS: NOT STARTED
-COMPLETED: —
+## UI & Creatures Agent — March 28, 2026
+STATUS: COMPLETE
+COMPLETED:
+  - res://ui/hud.tscn — CanvasLayer HUD (power meter, health, air, status icons, hotbar)
+  - res://ui/hotbar.gd, power_meter.gd, health_bar.gd, air_bar.gd, status_icons.gd, status_icon.tscn
+  - res://player/player_status.gd — status_changed signal for HUD; res://player/player.gd stub (group + take_damage)
+  - res://creatures/wolf.tscn + wolf.gd — hostile, chases player in range, melee damage
+  - res://creatures/rabbit.tscn + rabbit.gd — passive hop, flees within 120px
+  - res://creatures/bird.tscn + bird.gd — horizontal flight, respawns off-screen
+  - res://scripts/creature_sprite_util.gd — flat-color SpriteFrames until art PNGs land
+  - main.tscn — HUD instance, Player + Camera2D + PlayerStatus, ground plane, demo creatures
 IN PROGRESS: —
-BLOCKED ON: Player Agent (Player.item_collected signal)
+BLOCKED ON: —
 EXPORTS:
-  - autoload: Inventory.add_item(type, amount)
-  - autoload: Inventory.has_item(type, amount) → bool
+  - autoload: Inventory (item_added / item_removed) — hotbar listens
   - scene: res://ui/hud.tscn
-  - scene: res://creatures/wolf.tscn
-  - scene: res://creatures/rabbit.tscn
+  - scene: res://creatures/wolf.tscn, rabbit.tscn, bird.tscn
+  - PlayerStatus.status_changed(wet, on_fire, suffocating, air, health)
+  - PixelLab MCP art: optional drop-in paths per GDD (res://assets/ui/, res://assets/creatures/) — runtime placeholders active
 
 ---
 

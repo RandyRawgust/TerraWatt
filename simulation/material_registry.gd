@@ -23,6 +23,8 @@ const MAT_FIRE: int = 102
 const MAT_SMOKE: int = 103
 const MAT_ASH: int = 104
 const MAT_MUD: int = 105
+const MAT_COAL_DUST: int = 106
+const MAT_EMBERS: int = 107
 
 # Full material definitions loaded from res://simulation/materials/
 var materials: Dictionary = {}
@@ -54,3 +56,5 @@ func _register_defaults() -> void:
 	materials[MAT_SMOKE]      = {"name": "Smoke",     "category": "GAS",    "color": Color(0.25,0.25,0.25,0.7), "flammable": false}
 	materials[MAT_ASH]        = {"name": "Ash",       "category": "SOLID",  "color": Color(0.50,0.48,0.45), "flammable": false}
 	materials[MAT_MUD]        = {"name": "Mud",       "category": "LIQUID", "color": Color(0.40,0.30,0.18,0.9), "flammable": false, "density": 1.8}
+	materials[MAT_COAL_DUST]  = {"name": "Coal Dust", "category": "SOLID",  "color": Color(0.12,0.12,0.12), "flammable": true, "ignition_temp": 200.0}
+	materials[MAT_EMBERS]     = {"name": "Embers",    "category": "ENERGY", "color": Color(0.95,0.35,0.08), "flammable": false}
