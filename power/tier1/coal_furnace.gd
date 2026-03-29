@@ -46,14 +46,19 @@ func _setup_flame_frames() -> void:
 		flame_sprite.play("idle")
 		return
 	var sf := SpriteFrames.new()
-	var tex: Texture2D = load("res://assets/tiles/ores/coal_icon.png") as Texture2D
+	const _coal_icon: String = "res://assets/tiles/ores/coal_icon.png"
+	if not ResourceLoader.exists(_coal_icon):
+		return
+	var tex: Texture2D = load(_coal_icon) as Texture2D
+	if tex == null:
+		return
 	sf.add_animation("idle")
 	sf.set_animation_speed("idle", 1.0)
-	sf.add_frame("idle", tex, 0.0)
+	sf.add_frame("idle", tex, 1.0)
 	sf.add_animation("burn")
 	sf.set_animation_speed("burn", 10.0)
 	for _i in 3:
-		sf.add_frame("burn", tex, 0.0)
+		sf.add_frame("burn", tex, 0.25)
 	flame_sprite.sprite_frames = sf
 	flame_sprite.play("idle")
 

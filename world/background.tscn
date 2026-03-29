@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://b1g3h5q0c4v3e"]
+[gd_scene load_steps=5 format=3 uid="uid://b1g3h5q0c4v3e"]
 
 [ext_resource type="Script" uid="uid://bc08bvhtxy6p8" path="res://world/background.gd" id="1_bg"]
-[ext_resource type="Texture2D" path="res://assets/backgrounds/bg_industrial_tier1.png" id="2_ind"]
 
 [sub_resource type="Resource" id="Resource_ddn0q"]
 metadata/__load_path__ = "res://assets/backgrounds/bg_layer_far.png"
@@ -34,5 +33,4 @@ centered = false
 [node name="IndustrialLayer" type="Sprite2D" parent="."]
 visible = false
 z_index = 0
-texture = ExtResource("2_ind")
 centered = false

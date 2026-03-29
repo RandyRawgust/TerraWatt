@@ -41,10 +41,14 @@ func _on_pollution_for_era(_level: float) -> void:
 func _check_era_shift() -> void:
 	if layer_industrial == null:
 		return
-	if PollutionTracker.global_pollution_level > 0.1:
-		layer_industrial.visible = true
+	var tex_path: String = "res://assets/backgrounds/bg_industrial_tier1.png"
+	if ResourceLoader.exists(tex_path):
+		layer_industrial.texture = load(tex_path) as Texture2D
+		layer_industrial.visible = PollutionTracker.global_pollution_level > 0.1
 	else:
+		layer_industrial.texture = null
 		layer_industrial.visible = false
+	_fit_layers_to_viewport()
 
 
 func _fit_layers_to_viewport() -> void:

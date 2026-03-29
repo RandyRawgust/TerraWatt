@@ -32,7 +32,9 @@ var _glow_texture: Texture2D
 
 
 func _ready() -> void:
-	_glow_texture = load("res://assets/ui/light_radial.png") as Texture2D
+	const _glow_path: String = "res://assets/ui/light_radial.png"
+	if ResourceLoader.exists(_glow_path):
+		_glow_texture = load(_glow_path) as Texture2D
 
 
 func set_player_light(light: PointLight2D) -> void:
@@ -96,6 +98,8 @@ func _update_ore_glow() -> void:
 			old_pl.queue_free()
 	for tile_key in want.keys():
 		if _ore_lights.has(tile_key):
+			continue
+		if _glow_texture == null:
 			continue
 		var pl2 := PointLight2D.new()
 		pl2.color = _ORE_COLORS.get(want[tile_key], Color.WHITE)

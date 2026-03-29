@@ -20,7 +20,9 @@ var is_on_ground: bool = false
 var facing_right: bool = true
 var current_tool: String = "hammer"
 
-var _pending_belt_direction: int = ConveyorBelt.Direction.RIGHT
+const ConveyorBeltScene: PackedScene = preload("res://structures/conveyor_belt.tscn")
+# Matches ConveyorBelt.Direction: LEFT=0, RIGHT=1, UP=2, DOWN=3
+var _pending_belt_direction: int = 1
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision: CollisionShape2D = $CollisionShape2D
@@ -138,7 +140,7 @@ func _handle_belt_placement_input() -> void:
 		if belt is Node2D and (belt as Node2D).global_position.distance_to(place_pos) < 8.0:
 			print("Cannot place: conveyors cannot cross until Tier 2.")
 			return
-	var placed: Node2D = _place_structure_at("res://structures/conveyor_belt.tscn", place_pos)
+	var placed: Node2D = _place_structure_at(ConveyorBeltScene.resource_path, place_pos)
 	if placed == null:
 		return
 	placed.set("direction", _pending_belt_direction)
@@ -161,11 +163,15 @@ func _place_structure_at(scene_path: String, world_pos: Vector2) -> Node2D:
 
 func _apply_conveyor_push(delta: float) -> void:
 	for belt in get_tree().get_nodes_in_group("conveyors"):
-		if belt is ConveyorBelt:
-			var cb: ConveyorBelt = belt as ConveyorBelt
-			if global_position.distance_to(cb.global_position) < 14.0:
-				velocity += cb.get_push_vector() * delta
-				return
+		if not belt.has_method("get_push_vector"):
+			continue
+		var belt2d: Node2D = belt as Node2D
+		if belt2d == null:
+			continue
+		if global_position.distance_to(belt2d.global_position) < 14.0:
+			var push: Vector2 = belt.call("get_push_vector") as Vector2
+			velocity += push * delta
+			return
 
 
 func _handle_movement(delta: float) -> void:

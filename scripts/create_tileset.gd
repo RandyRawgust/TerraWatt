@@ -43,9 +43,12 @@ static func _build_tile_set() -> TileSet:
 	])
 	for i in _SOURCES.size():
 		var path: String = _SOURCES[i]
+		if not ResourceLoader.exists(path):
+			push_error("create_tileset: missing texture %s" % path)
+			continue
 		var tex: Texture2D = load(path) as Texture2D
 		if tex == null:
-			push_error("create_tileset: missing texture %s" % path)
+			push_error("create_tileset: could not load %s" % path)
 			continue
 		var src: TileSetAtlasSource = TileSetAtlasSource.new()
 		src.texture = tex
