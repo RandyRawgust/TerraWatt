@@ -377,6 +377,7 @@ Ask yourself:
 - Is my commit message formatted correctly?
 - Did I leave any print() debug statements? (Remove them)
 - Did I break any other system? (Run the main scene and check)
+- Does `git status` show only the files I intended to commit? (Avoid accidental `git add -A` bundling other agents’ work — see Retrospective § UI, HUD, creatures.)
 - For **downloaded art** (PixelLab, curl, CI artifacts): do file sizes and formats look valid (not HTML/JSON saved as `.png`, not empty or 1×1 placeholders)?
 
 Task is NOT complete until all quality gates pass.
