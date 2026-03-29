@@ -50,8 +50,6 @@ def load_master(name: str) -> Image.Image:
     img = Image.open(p).convert("RGBA")
     tw, th = EXPECTED[name]
     img = _fit_to_expected(img, tw, th)
-    if img.size != (tw, th):
-        img = img.resize((tw, th), Image.NEAREST)
     print(f"  Loaded: {p.name} ({img.width}x{img.height}, {size}b)")
     return img
 
