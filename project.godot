@@ -53,6 +53,10 @@ window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep"
 
+[gdextension]
+
+singletons=["res://simulation/gdextension/terrawatt_sim.gdextension"]
+
 [dotnet]
 
 project/assembly_name="Terra.Watt"
