@@ -23,7 +23,7 @@ var current_tool: String = "hammer"
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision: CollisionShape2D = $CollisionShape2D
 @onready var headlamp: PointLight2D = $Headlamp
-@onready var mining_system: MiningSystem = $MiningSystem
+@onready var mining_system: Node2D = $MiningSystem
 @onready var status_node: Node = $PlayerStatus
 
 

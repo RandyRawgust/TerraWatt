@@ -18,7 +18,7 @@ var _mine_duration: float = 0.0
 var _is_mining: bool = false
 
 @onready var _player: CharacterBody2D = get_parent()
-@onready var _progress_indicator: MineProgressIndicator = $MineProgressIndicator
+@onready var _progress_indicator: Node2D = $MineProgressIndicator
 
 
 func _ready() -> void:

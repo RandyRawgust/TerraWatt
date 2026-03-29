@@ -7,8 +7,8 @@ extends Node2D
 const WORLD_SEED: int = 12345
 
 @onready var world_renderer: Node2D = $WorldRenderer
-@onready var background_layer: BackgroundLayer = $BackgroundLayer as BackgroundLayer
-@onready var lighting_manager: LightingManager = $LightingManager as LightingManager
+@onready var background_layer: Node2D = $BackgroundLayer
+@onready var lighting_manager: Node2D = $LightingManager
 @onready var player: CharacterBody2D = $Player
 @onready var game_camera: Camera2D = $GameCamera
 @onready var hud: CanvasLayer = $HUD
