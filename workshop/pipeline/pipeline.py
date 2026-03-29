@@ -23,7 +23,7 @@ from PIL import Image
 MANIFEST_PATH   = Path("workshop/pipeline/manifest.json")
 RAW_PATH        = Path("workshop/raw_assets")
 ASEPRITE        = Path(r"C:\Program Files\Aseprite\Aseprite.exe")
-MIN_VALID_BYTES = 500  # files under this are failed downloads
+MIN_VALID_BYTES = 100  # tiny 12x10 pixel PNGs can be ~170b; below this treat as failed/corrupt
 
 # ── UTILITIES ─────────────────────────────────────────────────────────────────
 
@@ -82,6 +82,51 @@ def ensure_dir(path: Path):
     path.mkdir(parents=True, exist_ok=True)
 
 # ── SHEET ASSEMBLY ─────────────────────────────────────────────────────────────
+
+def assemble_character_sheet_v2(name: str, char_data: dict, manifest: dict) -> bool:
+    """
+    Manifest v2: frames is a list of pose names; raws are {name}_{pose}.png.
+    Player sheet → game/assets/player/player_sheet.png; others → creatures/{name}_sheet.png
+    """
+    frame_w = char_data["frame_w"]
+    frame_h = char_data["frame_h"]
+    frames_list = char_data["frames"]
+    raw_root = Path(manifest["paths"]["raw_characters"])
+    dest = Path(char_data.get("dest", f"game/assets/creatures/{name}_sheet.png"))
+    if name == "player":
+        dest = Path("game/assets/player/player_sheet.png")
+
+    print(f"\nAssembling sheet (v2): {name} ({frame_w}x{frame_h}, {len(frames_list)} frames)")
+
+    frame_images = []
+    all_valid = True
+    for pose in frames_list:
+        raw_path = raw_root / f"{name}_{pose}.png"
+        valid, msg = validate_png(raw_path)
+        if not valid:
+            print(f"  [X] {pose}: {msg}")
+            all_valid = False
+            frame_images.append(Image.new("RGBA", (frame_w, frame_h), (255, 0, 255, 180)))
+        else:
+            img = Image.open(raw_path).convert("RGBA").resize((frame_w, frame_h), Image.NEAREST)
+            frame_images.append(img)
+            print(f"  [OK] {pose}: {msg}")
+
+    total_w = frame_w * len(frame_images)
+    sheet = Image.new("RGBA", (total_w, frame_h), (0, 0, 0, 0))
+    for i, frame in enumerate(frame_images):
+        sheet.paste(frame, (i * frame_w, 0))
+
+    ensure_dir(dest.parent)
+    sheet.save(str(dest), "PNG")
+    print(f"  Sheet saved: {dest} ({total_w}x{frame_h}px, {dest.stat().st_size} bytes)")
+
+    ase_path = dest.with_suffix(".aseprite")
+    if run_aseprite(str(dest), "--save-as", str(ase_path)):
+        print(f"  Aseprite source: {ase_path}")
+
+    return all_valid
+
 
 def assemble_character_sheet(name: str, char_data: dict) -> bool:
     """
@@ -187,7 +232,14 @@ def audit(manifest: dict):
                 else:
                     missing += 1
             for frame_id in frames:
-                print(f"    [.] {frame_id}: (manifest v2 - per-frame files optional until export)")
+                fr = RAW_PATH / "characters" / f"{name}_{frame_id}.png"
+                fv, fm = validate_png(fr)
+                st = "[OK]" if fv else "[X]"
+                print(f"    {st} {frame_id}: {fm}")
+                if fv:
+                    complete += 1
+                else:
+                    missing += 1
         else:
             for frame_id, info in frames.items():
                 raw = RAW_PATH / "characters" / info["file"]
@@ -255,12 +307,14 @@ def assemble_all(manifest: dict):
     """Assemble all sprite sheets and copy all simple assets to game/."""
     print("\nAssembling all assets to game/...")
 
-    # Characters → sprite sheets (manifest v1: per-frame dict + sheet_layout)
+    # Characters → sprite sheets (v1: dict + sheet_layout; v2: list frames + derive_frames)
     for name, data in manifest["characters"].items():
         if data.get("sheet_layout") and isinstance(data.get("frames"), dict):
             assemble_character_sheet(name, data)
+        elif isinstance(data.get("frames"), list):
+            assemble_character_sheet_v2(name, data, manifest)
         else:
-            print(f"\n[skip] {name}: manifest v2 master layout - use V2 export or add sheet_layout + frame files")
+            print(f"\n[skip] {name}: unknown character manifest shape")
 
     # Tiles → direct copy
     print("\nCopying tiles...")
@@ -291,7 +345,7 @@ def main():
     parser = argparse.ArgumentParser(description="Terra.Watt Asset Pipeline")
     parser.add_argument("--check", action="store_true", help="Audit only")
     parser.add_argument("--assemble-only", action="store_true", help="Skip PixelLab, just assemble")
-    parser.add_argument("--character", help="Process one character only")
+    parser.add_argument("--character", "--char", dest="character", help="Process one character only")
     args = parser.parse_args()
 
     manifest = load_manifest()
@@ -310,8 +364,10 @@ def main():
             char = manifest["characters"].get(args.character)
             if char and char.get("sheet_layout") and isinstance(char.get("frames"), dict):
                 assemble_character_sheet(args.character, char)
+            elif char and isinstance(char.get("frames"), list):
+                assemble_character_sheet_v2(args.character, char, manifest)
             elif char:
-                print("Character entry is manifest v2 style; add sheet_layout + per-frame files for assembly.")
+                print("Character entry has no sheet_layout (v1) or frames list (v2).")
             else:
                 print(f"Unknown character: {args.character}")
         else:

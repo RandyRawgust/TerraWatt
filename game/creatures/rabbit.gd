@@ -71,10 +71,10 @@ func _setup_rabbit_sprite_frames() -> void:
 			atlas.region = r
 			frames.add_frame(anim_name, atlas)
 
-	# Contract: 36×12 strip, 12×12 frames — idle(1), hop(2) @ 6fps
-	add_rects.call("idle", [Rect2(0, 0, 12, 12)], 1.0, true)
-	add_rects.call("hop", [Rect2(12, 0, 12, 12), Rect2(24, 0, 12, 12)], 6.0, true)
-	add_rects.call("flee", [Rect2(12, 0, 12, 12), Rect2(24, 0, 12, 12)], 12.0, true)
+	# Contract: 48×16 strip, 16×16 frames — idle(1), hop(2) @ 6fps (V2 master-derived)
+	add_rects.call("idle", [Rect2(0, 0, 16, 16)], 1.0, true)
+	add_rects.call("hop", [Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16)], 6.0, true)
+	add_rects.call("flee", [Rect2(16, 0, 16, 16), Rect2(32, 0, 16, 16)], 12.0, true)
 
 	var spr: AnimatedSprite2D = $AnimatedSprite2D
 	spr.sprite_frames = frames

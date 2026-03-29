@@ -88,9 +88,9 @@ func _setup_bird_sprite_frames() -> void:
 			atlas.region = r
 			frames.add_frame(anim_name, atlas)
 
-	# Contract: 30×8 strip, 10×8 frames — perch(1), fly(2) @ 8fps
-	add_rects.call("perch", [Rect2(0, 0, 10, 8)], 1.0, true)
-	add_rects.call("fly", [Rect2(10, 0, 10, 8), Rect2(20, 0, 10, 8)], 8.0, true)
+	# Contract: 36×10 strip, 12×10 frames — perch(1), fly(2) @ 8fps (V2 master-derived)
+	add_rects.call("perch", [Rect2(0, 0, 12, 10)], 1.0, true)
+	add_rects.call("fly", [Rect2(12, 0, 12, 10), Rect2(24, 0, 12, 10)], 8.0, true)
 
 	var spr: AnimatedSprite2D = $AnimatedSprite2D
 	spr.sprite_frames = frames

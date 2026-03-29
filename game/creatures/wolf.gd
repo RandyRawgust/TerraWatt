@@ -90,7 +90,7 @@ func _setup_wolf_sprite_frames() -> void:
 		for i in range(start, end + 1):
 			var atlas: AtlasTexture = AtlasTexture.new()
 			atlas.atlas = texture
-			atlas.region = Rect2(i * 24, 0, 24, 16)
+			atlas.region = Rect2(i * 32, 0, 32, 20)
 			frames.add_frame(anim_name, atlas)
 
 	_add.call("idle", 0, 0, 1.0, true)
