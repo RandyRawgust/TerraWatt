@@ -13,7 +13,7 @@ var _burn_timer: float = 0.0
 @onready var smoke_emit_pos: Marker2D = $SmokeEmitPos
 @onready var engine_sprite: AnimatedSprite2D = $EngineSprite
 
-const PLACEHOLDER_TEX: Texture2D = preload("res://assets/power/placeholder_8x8.png")
+const PLACEHOLDER_TEX: Texture2D = preload("res://icon.svg")
 
 
 func _ready() -> void:

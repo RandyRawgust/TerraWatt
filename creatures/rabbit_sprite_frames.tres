@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://crabbitsfrm01"]
 
-[ext_resource type="Texture2D" uid="uid://c258acpfs1t61" path="res://assets/power/placeholder_8x8.png" id="1_tex"]
+[ext_resource type="Texture2D" path="res://icon.svg" id="1_tex"]
 
 [resource]
 animations = [{

@@ -8,7 +8,7 @@ const WATER_CHECK_RADIUS: int = 2  # tiles
 
 @onready var wheel_sprite: AnimatedSprite2D = $WheelSprite
 
-const PLACEHOLDER_TEX: Texture2D = preload("res://assets/power/placeholder_8x8.png")
+const PLACEHOLDER_TEX: Texture2D = preload("res://icon.svg")
 
 
 func _ready() -> void:
