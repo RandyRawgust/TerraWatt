@@ -95,6 +95,8 @@ These lessons come from multi-agent work: Pixel Sim GDExtension, World Gen / chu
 - **`AGENT_STATUS.md` EXPORTS** — List not only autoload names but **function signatures and Dictionary keys** for shared contracts.
 - **`project.godot` autoloads** — Keep doctrine’s autoload list in sync with the file (e.g. include `WorldData` when present).
 - **Quality gate for native code** — If your feature requires GDExtension, the quality gate includes **local compile + Godot run** on a machine with the toolchain, or CI that builds the library.
+- **Two doctrine paths** — After any edit, **`TERRAWATT_DOCTRINE.md` (repo root) and `.cursor/rules/TERRAWATT_DOCTRINE.md` must match** (see header). Cursor loads rules from `.cursor/rules/`; contributors often open the root file. Drift causes agents to follow different guidance than humans expect.
+- **Integration tests vs `ClassDB`** — Scenes or tests that require `TerrawattSimNode` must **gracefully skip or warn** when the GDExtension binary is missing (`ClassDB.class_exists` false), not hard-fail — the DLL is often gitignored and built only locally.
 
 ### Visual art, shell automation, and TileSet workflow (coordination session)
 
