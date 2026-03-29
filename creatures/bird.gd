@@ -77,22 +77,20 @@ func _setup_bird_sprite_frames() -> void:
 		push_warning("bird.gd: could not load sprite sheet")
 		return
 
-	var fw: int = maxi(1, int(floor(texture.get_width() / 3.0)))
-	var fh: int = maxi(1, mini(texture.get_height(), 10))
-
 	var frames: SpriteFrames = SpriteFrames.new()
-	var add_frames := func(anim_name: String, start: int, end: int, fps: float, loop: bool) -> void:
+	var add_rects := func(anim_name: String, rects: Array[Rect2], fps: float, loop: bool) -> void:
 		frames.add_animation(anim_name)
 		frames.set_animation_loop(anim_name, loop)
 		frames.set_animation_speed(anim_name, fps)
-		for i in range(start, end + 1):
+		for r in rects:
 			var atlas: AtlasTexture = AtlasTexture.new()
 			atlas.atlas = texture
-			atlas.region = Rect2(i * fw, 0, fw, fh)
+			atlas.region = r
 			frames.add_frame(anim_name, atlas)
 
-	add_frames.call("perch", 0, 0, 1.0, true)
-	add_frames.call("fly", 1, 2, 8.0, true)
+	# Contract: 30×8 strip, 10×8 frames — perch(1), fly(2) @ 8fps
+	add_rects.call("perch", [Rect2(0, 0, 10, 8)], 1.0, true)
+	add_rects.call("fly", [Rect2(10, 0, 10, 8), Rect2(20, 0, 10, 8)], 8.0, true)
 
 	var spr: AnimatedSprite2D = $AnimatedSprite2D
 	spr.sprite_frames = frames

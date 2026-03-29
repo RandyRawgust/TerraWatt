@@ -72,12 +72,12 @@ func _tick_burn(delta: float) -> void:
 			PollutionTracker.report_coal_burned()
 		is_burning = true
 		heat_output = HEAT_OUTPUT
-		if flame_sprite.sprite_frames:
+		if flame_sprite.sprite_frames and flame_sprite.sprite_frames.has_animation("burn"):
 			flame_sprite.play("burn")
 	else:
 		is_burning = false
 		heat_output = 0.0
-		if flame_sprite.sprite_frames:
+		if flame_sprite.sprite_frames and flame_sprite.sprite_frames.has_animation("idle"):
 			flame_sprite.play("idle")
 
 

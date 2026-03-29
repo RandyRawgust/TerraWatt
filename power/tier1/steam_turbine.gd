@@ -65,6 +65,8 @@ func _update_animation() -> void:
 	var spin_speed: float = get_output_fraction() * 5.0
 	turbine_sprite.speed_scale = spin_speed
 	if spin_speed > 0.1:
-		turbine_sprite.play("spin")
+		if turbine_sprite.sprite_frames.has_animation("spin"):
+			turbine_sprite.play("spin")
 	else:
-		turbine_sprite.play("idle")
+		if turbine_sprite.sprite_frames.has_animation("idle"):
+			turbine_sprite.play("idle")

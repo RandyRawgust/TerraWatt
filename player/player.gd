@@ -79,7 +79,8 @@ func _setup_sprite_frames() -> void:
 
 	sprite.sprite_frames = frames
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.play("idle")
+	if sprite.sprite_frames.has_animation("idle"):
+		sprite.play("idle")
 
 
 func _physics_process(delta: float) -> void:
@@ -200,12 +201,17 @@ func _apply_gravity(delta: float) -> void:
 
 
 func _update_animation() -> void:
+	if sprite.sprite_frames == null:
+		return
 	if not is_on_ground:
-		sprite.play("jump")
+		if sprite.sprite_frames.has_animation("jump"):
+			sprite.play("jump")
 	elif abs(velocity.x) > 10.0:
-		sprite.play("walk")
+		if sprite.sprite_frames.has_animation("walk"):
+			sprite.play("walk")
 	else:
-		sprite.play("idle")
+		if sprite.sprite_frames.has_animation("idle"):
+			sprite.play("idle")
 
 
 func _update_headlamp() -> void:

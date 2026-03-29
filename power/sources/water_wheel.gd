@@ -27,11 +27,11 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	var flow_rate: float = _measure_water_flow()
 	set_output(BASE_OUTPUT * flow_rate)
-	if wheel_sprite:
-		if is_operating:
+	if wheel_sprite and wheel_sprite.sprite_frames:
+		if is_operating and wheel_sprite.sprite_frames.has_animation("spin"):
 			wheel_sprite.play("spin")
 			wheel_sprite.speed_scale = get_output_fraction() * 2.0
-		else:
+		elif wheel_sprite.sprite_frames.has_animation("idle"):
 			wheel_sprite.play("idle")
 
 

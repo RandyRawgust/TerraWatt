@@ -47,11 +47,11 @@ func _tick_burn(delta: float) -> void:
 		if randf() < 0.1:
 			SimManager.add_particle(ex, ey, MaterialRegistry.MAT_STEAM)
 			SimManager.add_particle(ex, ey, MaterialRegistry.MAT_SMOKE)
-		if engine_sprite:
+		if engine_sprite and engine_sprite.sprite_frames and engine_sprite.sprite_frames.has_animation("operate"):
 			engine_sprite.play("operate")
 	else:
 		set_output(0.0)
-		if engine_sprite:
+		if engine_sprite and engine_sprite.sprite_frames and engine_sprite.sprite_frames.has_animation("idle"):
 			engine_sprite.play("idle")
 
 

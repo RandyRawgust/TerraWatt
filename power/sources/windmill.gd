@@ -35,9 +35,9 @@ func _physics_process(delta: float) -> void:
 
 	var wind_strength: float = _calculate_wind()
 	set_output(lerp(MIN_OUTPUT, MAX_OUTPUT, wind_strength))
-	if blade_sprite:
+	if blade_sprite and blade_sprite.sprite_frames:
 		blade_sprite.speed_scale = get_output_fraction() * 3.0
-		if not blade_sprite.is_playing():
+		if blade_sprite.sprite_frames.has_animation("spin") and not blade_sprite.is_playing():
 			blade_sprite.play("spin")
 
 

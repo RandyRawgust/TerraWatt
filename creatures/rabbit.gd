@@ -60,23 +60,21 @@ func _setup_rabbit_sprite_frames() -> void:
 		push_warning("rabbit.gd: could not load sprite sheet")
 		return
 
-	var fw: int = maxi(1, int(floor(texture.get_width() / 3.0)))
-	var fh: int = maxi(1, mini(texture.get_height(), 16))
-
 	var frames: SpriteFrames = SpriteFrames.new()
-	var append_range := func(anim_name: String, start: int, end: int, fps: float, loop: bool) -> void:
+	var add_rects := func(anim_name: String, rects: Array[Rect2], fps: float, loop: bool) -> void:
 		frames.add_animation(anim_name)
 		frames.set_animation_loop(anim_name, loop)
 		frames.set_animation_speed(anim_name, fps)
-		for i in range(start, end + 1):
+		for r in rects:
 			var atlas: AtlasTexture = AtlasTexture.new()
 			atlas.atlas = texture
-			atlas.region = Rect2(i * fw, 0, fw, fh)
+			atlas.region = r
 			frames.add_frame(anim_name, atlas)
 
-	append_range.call("idle", 0, 0, 1.0, true)
-	append_range.call("hop", 0, 2, 6.0, true)
-	append_range.call("flee", 1, 2, 12.0, true)
+	# Contract: 36×12 strip, 12×12 frames — idle(1), hop(2) @ 6fps
+	add_rects.call("idle", [Rect2(0, 0, 12, 12)], 1.0, true)
+	add_rects.call("hop", [Rect2(12, 0, 12, 12), Rect2(24, 0, 12, 12)], 6.0, true)
+	add_rects.call("flee", [Rect2(12, 0, 12, 12), Rect2(24, 0, 12, 12)], 12.0, true)
 
 	var spr: AnimatedSprite2D = $AnimatedSprite2D
 	spr.sprite_frames = frames
