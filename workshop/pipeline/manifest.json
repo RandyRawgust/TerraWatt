@@ -74,15 +74,15 @@
   },
 
   "power": {
-    "coal_furnace":   {"file": "power_furnace.png",   "status": "needed", "output": "game/assets/power/tier1/furnace.png"},
-    "water_boiler":   {"file": "power_boiler.png",    "status": "needed", "output": "game/assets/power/tier1/water_boiler.png"},
-    "steam_turbine":  {"file": "power_turbine.png",   "status": "needed", "output": "game/assets/power/tier1/steam_turbine.png"},
-    "power_pole":     {"file": "power_pole.png",      "status": "needed", "output": "game/assets/power/tier1/power_pole.png"}
+    "coal_furnace":   {"file": "power_furnace.png",   "status": "complete", "output": "game/assets/power/tier1/furnace.png"},
+    "water_boiler":   {"file": "power_boiler.png",    "status": "complete", "output": "game/assets/power/tier1/water_boiler.png"},
+    "steam_turbine":  {"file": "power_turbine.png",   "status": "complete", "output": "game/assets/power/tier1/steam_turbine.png"},
+    "power_pole":     {"file": "power_pole.png",      "status": "complete", "output": "game/assets/power/tier1/power_pole.png"}
   },
 
   "ui": {
-    "hotbar_slot":    {"file": "ui_hotbar_slot.png",  "status": "needed", "output": "game/assets/ui/hotbar_slot.png"},
-    "status_icon_base":{"file": "ui_status_icon.png", "status": "needed", "output": "game/assets/ui/status_icon_base.png"},
-    "light_radial":   {"file": "ui_light_radial.png", "status": "needed", "output": "game/assets/ui/light_radial.png"}
+    "hotbar_slot":    {"file": "ui_hotbar_slot.png",  "status": "complete", "output": "game/assets/ui/hotbar_slot.png"},
+    "status_icon_base":{"file": "ui_status_icon.png", "status": "complete", "output": "game/assets/ui/status_icon_base.png"},
+    "light_radial":   {"file": "ui_light_radial.png", "status": "complete", "output": "game/assets/ui/light_radial.png"}
   }
 }
