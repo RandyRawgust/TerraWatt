@@ -15,9 +15,15 @@ var source_tile_id: int = -1
 
 
 func _ready() -> void:
+	sleeping = false
+	can_sleep = false
 	apply_central_impulse(Vector2(randf_range(-30.0, 30.0), -80.0))
 	$PickupArea.body_entered.connect(_on_pickup_area_body_entered)
 	_apply_icon()
+
+
+func _physics_process(_delta: float) -> void:
+	sleeping = false
 
 
 func _apply_icon() -> void:
