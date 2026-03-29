@@ -7,15 +7,15 @@ extends Node2D
 
 func _ready() -> void:
 	print("Terra.Watt — Initializing...")
-	WorldData.initialize(12345)
-	var cam := $Camera2D as Camera2D
-	var spawn: Vector2 = SpawnLocator.find_spawn_point(200)
-	cam.global_position = spawn
-	var wr := $WorldRenderer as WorldRenderer
-	if wr:
-		wr.set_camera(cam)
-	print("Terra.Watt — Ready. Spawn at ", spawn)
-
-
-func _process(_delta: float) -> void:
-	pass
+	WorldData.initialize(randi())
+	var wr: WorldRenderer = $WorldRenderer
+	var player: Player = $Player
+	var cam: Camera2D = player.get_node("Camera2D") as Camera2D
+	wr.set_camera(cam)
+	var sx: int = int(floor(player.global_position.x / float(WorldData.TILE_SIZE)))
+	var sy: int = WorldData.get_surface_y(sx)
+	player.global_position = Vector2(
+		float(sx) * float(WorldData.TILE_SIZE) + float(WorldData.TILE_SIZE) * 0.5,
+		float(sy - 4) * float(WorldData.TILE_SIZE)
+	)
+	print("Terra.Watt — Ready. Surface Y at x=%d: %d" % [sx, sy])

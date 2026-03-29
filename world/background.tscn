@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://bgtwbackground001"]
+
+[ext_resource type="Script" path="res://world/background.gd" id="1_bg"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/bg_layer_far.png" id="2_far"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/bg_layer_mid.png" id="3_mid"]
+[ext_resource type="Texture2D" path="res://assets/backgrounds/bg_layer_near.png" id="4_near"]
+
+[node name="BackgroundLayer" type="Node2D"]
+z_index = -100
+script = ExtResource("1_bg")
+
+[node name="LayerFar" type="Sprite2D" parent="."]
+z_index = -3
+texture = ExtResource("2_far")
+centered = false
+
+[node name="LayerMid" type="Sprite2D" parent="."]
+z_index = -2
+texture = ExtResource("3_mid")
+centered = false
+
+[node name="LayerNear" type="Sprite2D" parent="."]
+z_index = -1
+texture = ExtResource("4_near")
+centered = false

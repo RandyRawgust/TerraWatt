@@ -1,16 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://bqj8mainterra001"]
+[gd_scene load_steps=4 format=3 uid="uid://bqj8mainterra001"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_main"]
 [ext_resource type="PackedScene" uid="uid://cworldrenderer001" path="res://world/world_renderer.tscn" id="2_wr"]
+[ext_resource type="PackedScene" uid="uid://cplayerterra001" path="res://player/player.tscn" id="3_pl"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
 
 [node name="WorldRenderer" parent="." instance=ExtResource("2_wr")]
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(3200, 400)
-
-[node name="Player" type="Node2D" parent="."]
+[node name="Player" parent="." instance=ExtResource("3_pl")]
 
 [node name="HUD" type="Node2D" parent="."]

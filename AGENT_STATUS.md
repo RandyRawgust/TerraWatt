@@ -71,11 +71,20 @@ EXPORTS:
 
 ---
 
-## Player Agent — [DATE]
-STATUS: NOT STARTED
-COMPLETED: —
+## Player Agent — March 28, 2026
+STATUS: COMPLETE
+COMPLETED:
+  - res://player/player.gd — movement, jump, mining tool, signals tile_mined / item_collected
+  - res://player/player.tscn — AnimatedSprite2D, capsule collision, headlamp, camera, MiningSystem, PlayerStatus
+  - res://mining/mining_system.gd — click-hold mine, range, tool speed, spawns collectibles
+  - res://mining/mine_progress_indicator.gd — arc progress
+  - res://mining/collectible_item.gd + .tscn — bobbing pickup, Inventory.add_item
+  - res://player/player_status.gd — wet/fire/smoke, air, health, status_changed
+  - res://main.tscn — instances WorldRenderer + Player; main.gd seeds WorldData and spawns player above surface
+  - Placeholder art: res://assets/player/player_frames.png, res://assets/ui/light_radial.png, res://assets/tiles/ores/*_icon.png
+  - world_renderer.gd — TileSet physics + two extra placeholder tile colors (ids 8–9); removed .gdignore from asset folders so textures import
 IN PROGRESS: —
-BLOCKED ON: World Gen Agent (WorldData stubs acceptable)
+BLOCKED ON: —
 EXPORTS:
   - signal: Player.tile_mined(tile_pos, tile_id)
   - signal: Player.item_collected(item_type, amount)

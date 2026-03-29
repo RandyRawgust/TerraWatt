@@ -16,6 +16,8 @@ const MAT_COAL: int = 4
 const MAT_COPPER_ORE: int = 5
 const MAT_IRON_ORE: int = 6
 const MAT_CLAY: int = 7
+const MAT_WOOD_PLANK: int = 8
+const MAT_STONE_BRICK: int = 9
 # Simulation particle materials (100+)
 const MAT_WATER: int = 100
 const MAT_STEAM: int = 101
@@ -50,6 +52,8 @@ func _register_defaults() -> void:
 	materials[MAT_COPPER_ORE] = {"name": "Copper Ore","category": "SOLID",  "color": Color(0.72,0.45,0.20), "flammable": false, "mine_time": 2.0}
 	materials[MAT_IRON_ORE]   = {"name": "Iron Ore",  "category": "SOLID",  "color": Color(0.54,0.54,0.60), "flammable": false, "mine_time": 2.5}
 	materials[MAT_CLAY]       = {"name": "Clay",      "category": "SOLID",  "color": Color(0.65,0.48,0.35), "flammable": false, "mine_time": 0.7}
+	materials[MAT_WOOD_PLANK] = {"name": "Wood",      "category": "SOLID",  "color": Color(0.45,0.32,0.18), "flammable": true,  "mine_time": 0.4}
+	materials[MAT_STONE_BRICK]= {"name": "Stone Brick","category": "SOLID", "color": Color(0.48,0.48,0.48), "flammable": false, "mine_time": 1.2}
 	materials[MAT_WATER]      = {"name": "Water",     "category": "LIQUID", "color": Color(0.20,0.50,0.80,0.8), "flammable": false, "density": 1.0}
 	materials[MAT_STEAM]      = {"name": "Steam",     "category": "GAS",    "color": Color(0.85,0.85,0.90,0.5), "flammable": false}
 	materials[MAT_FIRE]       = {"name": "Fire",      "category": "ENERGY", "color": Color(1.0,0.45,0.10),  "flammable": false}

@@ -1,0 +1,46 @@
+[gd_scene load_steps=8 format=3 uid="uid://cplayerterra001"]
+
+[ext_resource type="Script" path="res://player/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://mining/mining_system.gd" id="2_mine"]
+[ext_resource type="Script" path="res://mining/mine_progress_indicator.gd" id="3_prog"]
+[ext_resource type="Script" path="res://player/player_status.gd" id="4_stat"]
+[ext_resource type="Texture2D" path="res://assets/ui/light_radial.png" id="5_light"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_player"]
+radius = 5.0
+height = 20.0
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("1_player")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -15)
+shape = SubResource("CapsuleShape2D_player")
+
+[node name="Headlamp" type="PointLight2D" parent="."]
+position = Vector2(8, -24)
+color = Color(1, 0.96, 0.85, 1)
+energy = 1.0
+texture = ExtResource("5_light")
+texture_scale = 0.6
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(0, -16)
+current = true
+position_smoothing_enabled = true
+
+[node name="MiningSystem" type="Node2D" parent="."]
+script = ExtResource("2_mine")
+
+[node name="MineProgressIndicator" type="Node2D" parent="MiningSystem"]
+visible = false
+z_index = 10
+script = ExtResource("3_prog")
+
+[node name="PlayerStatus" type="Node" parent="."]
+script = ExtResource("4_stat")

@@ -49,6 +49,8 @@ func _build_placeholder_tileset() -> TileSet:
 		Color(0.72, 0.45, 0.20),
 		Color(0.54, 0.54, 0.60),
 		Color(0.65, 0.48, 0.35),
+		Color(0.45, 0.32, 0.18),
+		Color(0.48, 0.46, 0.44),
 	]
 	var img := Image.create(16 * colors.size(), 16, false, Image.FORMAT_RGBA8)
 	for i in colors.size():
@@ -64,7 +66,6 @@ func _build_placeholder_tileset() -> TileSet:
 		atlas.create_tile(Vector2i(i, 0))
 	var ts := TileSet.new()
 	ts.add_physics_layer(1, 0xFFFFFFFF, null)
-	ts.set_physics_layer_collision_layer(1, 1)
 	ts.add_source(atlas, 0)
 	for i in colors.size():
 		if i == 0:
