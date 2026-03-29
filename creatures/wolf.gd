@@ -14,13 +14,7 @@ var _attack_timer: float = 0.0
 func _ready() -> void:
 	add_to_group("creatures")
 	add_to_group("hostile_creatures")
-	var sprite: AnimatedSprite2D = $AnimatedSprite2D
-	var sf: SpriteFrames = SpriteFrames.new()
-	CreatureSpriteUtil.add_animation_frames(sf, "idle", 1, 24, 16, Color(0.32, 0.32, 0.35))
-	CreatureSpriteUtil.add_animation_frames(sf, "walk", 4, 24, 16, Color(0.3, 0.3, 0.34), 0.03)
-	CreatureSpriteUtil.add_animation_frames(sf, "attack", 2, 24, 16, Color(0.35, 0.28, 0.28), 0.05)
-	sprite.sprite_frames = sf
-	sprite.play("idle")
+	$AnimatedSprite2D.play("idle")
 
 
 func _physics_process(delta: float) -> void:
@@ -39,6 +33,8 @@ func _physics_process(delta: float) -> void:
 		spr.play("attack")
 	else:
 		spr.play("idle")
+	if _target:
+		spr.flip_h = _target.global_position.x < global_position.x
 
 
 func _seek_target() -> void:

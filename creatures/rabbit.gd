@@ -12,12 +12,7 @@ var _idle_timer: float = 0.0
 
 func _ready() -> void:
 	add_to_group("creatures")
-	var sprite: AnimatedSprite2D = $AnimatedSprite2D
-	var sf: SpriteFrames = SpriteFrames.new()
-	CreatureSpriteUtil.add_animation_frames(sf, "idle", 1, 12, 12, Color(0.62, 0.48, 0.36))
-	CreatureSpriteUtil.add_animation_frames(sf, "hop", 2, 12, 12, Color(0.58, 0.44, 0.32), 0.06)
-	sprite.sprite_frames = sf
-	sprite.play("idle")
+	$AnimatedSprite2D.play("idle")
 	_idle_timer = randf_range(IDLE_WAIT_MIN, IDLE_WAIT_MAX)
 
 
@@ -43,5 +38,7 @@ func _physics_process(delta: float) -> void:
 		spr.play("hop")
 	else:
 		spr.play("idle")
+	if abs(velocity.x) > 8.0:
+		spr.flip_h = velocity.x < 0
 
 	move_and_slide()

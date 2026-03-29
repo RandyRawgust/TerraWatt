@@ -1,0 +1,25 @@
+[gd_resource type="SpriteFrames" load_steps=2 format=3 uid="uid://cbirdsframes001"]
+
+[ext_resource type="Texture2D" uid="uid://c258acpfs1t61" path="res://assets/power/placeholder_8x8.png" id="1_tex"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_tex")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 0.25,
+"texture": ExtResource("1_tex")
+}, {
+"duration": 0.25,
+"texture": ExtResource("1_tex")
+}],
+"loop": true,
+"name": &"flap",
+"speed": 5.0
+}]

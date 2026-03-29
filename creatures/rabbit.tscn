@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://crabbitterra01"]
+[gd_scene load_steps=4 format=3 uid="uid://crabbitterra01"]
 
 [ext_resource type="Script" path="res://creatures/rabbit.gd" id="1_rabbit"]
+[ext_resource type="SpriteFrames" uid="uid://crabbitsfrm01" path="res://creatures/rabbit_sprite_frames.tres" id="2_sf"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rabbit"]
 radius = 5.0
@@ -13,6 +14,7 @@ script = ExtResource("1_rabbit")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -6)
+sprite_frames = ExtResource("2_sf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -2)

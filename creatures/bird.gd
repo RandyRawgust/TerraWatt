@@ -11,12 +11,7 @@ var _anchor_y: float = 0.0
 func _ready() -> void:
 	add_to_group("creatures")
 	_anchor_y = global_position.y
-	var sprite: AnimatedSprite2D = $AnimatedSprite2D
-	var sf: SpriteFrames = SpriteFrames.new()
-	CreatureSpriteUtil.add_animation_frames(sf, "idle", 1, 10, 8, Color(0.5, 0.38, 0.28))
-	CreatureSpriteUtil.add_animation_frames(sf, "flap", 2, 10, 8, Color(0.48, 0.36, 0.26), 0.05)
-	sprite.sprite_frames = sf
-	sprite.play("flap")
+	$AnimatedSprite2D.play("flap")
 	_pick_target()
 
 
@@ -26,6 +21,9 @@ func _process(delta: float) -> void:
 
 	global_position.y = _anchor_y + sin(_flutter_phase) * 4.0
 	global_position.x = move_toward(global_position.x, _target_x, FLY_SPEED * delta)
+
+	var spr: AnimatedSprite2D = $AnimatedSprite2D
+	spr.flip_h = global_position.x > _target_x
 
 	if abs(global_position.x - _target_x) < 6.0:
 		_pick_target()

@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://cwolfterra001"]
+[gd_scene load_steps=5 format=3 uid="uid://cwolfterra001"]
 
 [ext_resource type="Script" path="res://creatures/wolf.gd" id="1_wolf"]
+[ext_resource type="SpriteFrames" uid="uid://cx8wolfsfrms1" path="res://creatures/wolf_sprite_frames.tres" id="2_sf"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wolf"]
 radius = 9.0
@@ -16,6 +17,7 @@ script = ExtResource("1_wolf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -8)
+sprite_frames = ExtResource("2_sf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -2)
