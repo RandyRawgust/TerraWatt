@@ -14,11 +14,19 @@ var _selected_slot: int = 0
 
 
 func _ready() -> void:
+	add_to_group("hotbar")
 	_build_slots()
 	Inventory.item_added.connect(_on_inventory_changed)
 	Inventory.item_removed.connect(_on_inventory_changed)
 	_refresh_display()
 	_update_selection_highlight()
+
+
+func get_selected_item_name() -> String:
+	var keys: Array = Inventory.items.keys()
+	if _selected_slot >= 0 and _selected_slot < keys.size():
+		return str(keys[_selected_slot])
+	return ""
 
 
 func _build_slots() -> void:
@@ -63,6 +71,8 @@ func _refresh_display() -> void:
 			var item_name: String = items[i]
 			var count: int = Inventory.get_count(item_name)
 			var tex_path: String = "res://assets/tiles/ores/%s_icon.png" % item_name
+			if not ResourceLoader.exists(tex_path):
+				tex_path = "res://assets/power/tier1/%s.png" % item_name
 			if ResourceLoader.exists(tex_path):
 				icon.texture = load(tex_path) as Texture2D
 			else:
@@ -81,6 +91,14 @@ func _input(event: InputEvent) -> void:
 		if event is InputEventKey and event.keycode == key and event.pressed and not event.echo:
 			_selected_slot = i
 			_update_selection_highlight()
+
+
+# Item id at the selected slot, or "" if empty.
+func get_selected_item_type() -> String:
+	var items: Array = Inventory.items.keys()
+	if _selected_slot >= 0 and _selected_slot < items.size():
+		return items[_selected_slot] as String
+	return ""
 
 
 func _update_selection_highlight() -> void:

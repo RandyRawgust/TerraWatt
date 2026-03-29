@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://dm4powerpole1tier"]
+
+[ext_resource type="Script" path="res://power/tier1/power_pole.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/power/tier1/power_pole.png" id="2_tex"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dist"]
+radius = 80.0
+
+[node name="PowerPole" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="PoleSprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_tex")
+offset = Vector2(0, -32)
+
+[node name="WireDrawer" type="Node2D" parent="."]
+
+[node name="DistributionArea" type="Area2D" parent="."]
+visible = false
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DistributionArea"]
+shape = SubResource("CircleShape2D_dist")

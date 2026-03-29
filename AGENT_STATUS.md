@@ -152,6 +152,22 @@ EXPORTS:
 
 ---
 
+## Sprites Agent (Tier 1) — March 29, 2026
+STATUS: COMPLETE
+COMPLETED:
+  - `player_sheet.png` generated (PixelLab map object `b504e3d4-9a33-40e9-a905-4a56b8bdfebe`) and wired in `player/player.gd` — 6×24×40 atlas, idle / walk / jump
+  - `wolf_sheet.png`, `rabbit_sheet.png`, `bird_sheet.png` generated and wired in `creatures/*.gd` — `AnimatedSprite2D` + `TEXTURE_FILTER_NEAREST`, silhouettes hidden when sheets load
+  - `assets/ASSET_MANIFEST.md` updated with player + creature strips and TODO list
+IN PROGRESS: —
+BLOCKED ON: —
+EXPORTS:
+  - `res://assets/player/player_sheet.png`
+  - `res://assets/creatures/wolf_sheet.png`
+  - `res://assets/creatures/rabbit_sheet.png`
+  - `res://assets/creatures/bird_sheet.png`
+
+---
+
 ## Power Tier 0 Agent — March 28, 2026
 STATUS: COMPLETE
 COMPLETED:
@@ -174,6 +190,26 @@ EXPORTS:
 
 ---
 
+## Coal Power Agent (Tier 1) — March 29, 2026
+STATUS: COMPLETE
+COMPLETED:
+  - MaterialRegistry: `fuel_value` on Coal (30) and Wood (15); Wood `ignition_temp` aligned with fuels
+  - `power/tier1/coal_furnace.gd` + `coal_furnace.tscn` — burn timer, heat output, smoke particles, groups `machines` + `coal_furnaces`, `PollutionTracker.report_coal_burned()` per unit consumed
+  - `power/tier1/water_boiler.gd` + `water_boiler.tscn` — heat link, water → steam pressure, steam particles, pressure needle
+  - `power/tier1/steam_turbine.gd` + `steam_turbine.tscn` — `PowerSourceBase` → `PowerGrid`, steam efficiency, spin animation
+  - `player/machine_interactor.gd` + `player.tscn` — **E**: load coal, link boiler↔furnace + water bucket, link turbine↔boiler (128px chain range)
+  - `crafting/recipe_registry.gd` — Tier 1 workbench recipes (furnace / boiler / turbine)
+IN PROGRESS: —
+BLOCKED ON: —
+EXPORTS:
+  - scenes: `res://power/tier1/coal_furnace.tscn`, `water_boiler.tscn`, `steam_turbine.tscn`
+  - class_name: `CoalFurnace`, `WaterBoiler`, `SteamTurbine` — group `machines` (furnace also `coal_furnaces`)
+  - recipes: `RecipeRegistry`-pattern script at `res://crafting/recipe_registry.gd` (preload for `RECIPES`)
+NOTE:
+  - Machine body textures use ore placeholders until `res://assets/power/tier1/` PixelLab art is dropped in.
+
+---
+
 ## Pollution Agent (Tier 1) — March 29, 2026
 STATUS: COMPLETE
 COMPLETED:
@@ -191,6 +227,48 @@ EXPORTS:
   - autoload: PollutionTracker.global_pollution_level, report_coal_burned(), signals pollution_changed / acid_rain_*
   - scene: res://world/pollution_overlay.tscn
   - groups: coal_furnaces (soot + sim), structures (soot targets)
+
+---
+
+## Conveyors Agent — March 29, 2026
+STATUS: COMPLETE
+COMPLETED:
+  - `res://structures/conveyor_belt.gd` + `conveyor_belt.tscn` — belt speed, direction enum, item carry list, `get_push_vector()`, Tier-1 placement overlap rule enforced from player
+  - `res://structures/belt_inserter.gd` + `belt_inserter.tscn` — `Area2D` delivers `coal` collectibles to `coal_furnaces` / `machines` with `add_coal()` within 24px (scene must be instanced; no hotbar hook yet)
+  - Player: R / scroll wheel cycles belt direction; right-click with `conveyor_belt` hotbar + inventory places snapped 16px; conveyor push when standing on belt
+  - `mining/collectible_item.gd` — registers/unregisters with conveyors by proximity
+  - `hotbar.gd` — `get_selected_item_name()`, group `hotbar`
+  - Input `rotate_structure` (R) in `project.godot` and `main.gd` `_ensure_input_actions` fallback
+  - `res://assets/structures/conveyor_belt_sheet.png` — 64×8 strip (4×16×8) procedural PNG; code falls back if missing
+IN PROGRESS: —
+BLOCKED ON: —
+EXPORTS:
+  - `class_name ConveyorBelt`, group `conveyors`
+  - Place with inventory key `conveyor_belt` (give via `Inventory.add_item` for tests)
+  - Belt inserter scene path: `res://structures/belt_inserter.tscn`
+NOTE:
+  - Coal furnace scene: `res://power/tier1/coal_furnace.tscn`; inserter calls `add_coal` when a `coal_furnaces` member is nearby
+
+---
+
+## Electrical Grid Agent (Tier 1) — March 29, 2026
+STATUS: COMPLETE
+COMPLETED:
+  - `power/power_grid.gd` — pole registration, union-find networks, per-network feed from sources within `PowerPole.CONNECTION_RANGE`, capacity = poles × 500 W (GDD §6 wooden pole), `has_power_at()`, `get_pole_network_watts()`, `get_local_power()` merges mechanical + distribution; `pole_registered` signal
+  - `power/tier1/power_pole.gd` + `power_pole.tscn` — `class_name PowerPole`, sag wire drawing, powered tint via grid
+  - Player — `place` action places `power_pole` when hotbar item selected; solid tile below required; uses `_place_structure_at`
+  - `ui/power_meter.gd` + `hud.tscn` — Gen/Dem progress bars, status light (green/yellow/red), kW formatting
+  - `ui/hotbar.gd` — icon fallback `res://assets/power/tier1/<item>.png` for non-ore items
+  - `main.gd` — `Inventory.add_item("power_pole", 5)` for smoke test
+  - Placeholder PNGs: `assets/power/tier1/power_pole.png`, `wire_segment.png` (replace with PixelLab art as needed)
+IN PROGRESS: —
+BLOCKED ON: —
+EXPORTS:
+  - `PowerGrid.register_pole` / `unregister_pole` — Node2D poles
+  - `PowerGrid.has_power_at(world_pos)`, `get_pole_network_watts(pole)`, `get_local_power(pos)` (Tier 0 + Tier 1)
+  - `signal pole_registered(pole: Node2D)`
+  - `class_name PowerPole` — `CAPACITY_WATTS` 500, `CONNECTION_RANGE` 160, `DISTRIBUTION_RADIUS` 80
+  - `res://power/tier1/power_pole.tscn`, inventory id `power_pole`
 
 ---
 

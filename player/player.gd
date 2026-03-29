@@ -20,6 +20,8 @@ var is_on_ground: bool = false
 var facing_right: bool = true
 var current_tool: String = "hammer"
 
+var _pending_belt_direction: int = ConveyorBelt.Direction.RIGHT
+
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision: CollisionShape2D = $CollisionShape2D
 @onready var headlamp: PointLight2D = $Headlamp
@@ -42,9 +44,8 @@ func _on_collectible_item_collected(item_type: String) -> void:
 
 
 func _setup_sprite_frames() -> void:
-	const PLAYER_TEX: String = "res://assets/player/player_frames.png"
+	const PLAYER_TEX: String = "res://assets/player/player_sheet.png"
 	if not ResourceLoader.exists(PLAYER_TEX):
-		# Temporary placeholder until PixelLab sprites are generated
 		var placeholder := PlaceholderTexture2D.new()
 		placeholder.size = Vector2(24, 40)
 		var sf_p := SpriteFrames.new()
@@ -54,41 +55,117 @@ func _setup_sprite_frames() -> void:
 			sf_p.add_frame(anim_name, placeholder, 1.0)
 		sprite.sprite_frames = sf_p
 		return
-	var tex: Texture2D = load(PLAYER_TEX) as Texture2D
-	if tex == null:
+	var texture: Texture2D = load(PLAYER_TEX) as Texture2D
+	if texture == null:
 		push_error("Player: could not load %s" % PLAYER_TEX)
 		return
-	var sf := SpriteFrames.new()
-	sf.add_animation("idle")
-	sf.set_animation_loop("idle", true)
-	var at_idle := AtlasTexture.new()
-	at_idle.atlas = tex
-	at_idle.region = Rect2(0, 0, 24, 40)
-	sf.add_frame("idle", at_idle, 1.0)
-	sf.add_animation("jump")
-	sf.set_animation_loop("jump", true)
-	var at_jump := AtlasTexture.new()
-	at_jump.atlas = tex
-	at_jump.region = Rect2(24, 0, 24, 40)
-	sf.add_frame("jump", at_jump, 1.0)
-	sf.add_animation("walk")
-	sf.set_animation_loop("walk", true)
-	for i in 4:
-		var at := AtlasTexture.new()
-		at.atlas = tex
-		at.region = Rect2(i * 24, 0, 24, 40)
-		sf.add_frame("walk", at, 1.0)
-	sprite.sprite_frames = sf
+
+	var frames: SpriteFrames = SpriteFrames.new()
+	var _add: Callable = func(anim_name: String, start: int, end: int, fps: float, loop: bool) -> void:
+		frames.add_animation(anim_name)
+		frames.set_animation_loop(anim_name, loop)
+		frames.set_animation_speed(anim_name, fps)
+		for i in range(start, end + 1):
+			var atlas: AtlasTexture = AtlasTexture.new()
+			atlas.atlas = texture
+			atlas.region = Rect2(i * 24, 0, 24, 40)
+			frames.add_frame(anim_name, atlas)
+
+	_add.call("idle", 0, 0, 1.0, true)
+	_add.call("walk", 1, 4, 8.0, true)
+	_add.call("jump", 5, 5, 1.0, false)
+
+	sprite.sprite_frames = frames
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.play("idle")
 
 
 func _physics_process(delta: float) -> void:
 	_apply_gravity(delta)
+	_handle_belt_placement_input()
 	_handle_movement(delta)
+	_apply_conveyor_push(delta)
 	_handle_jump()
 	move_and_slide()
 	is_on_ground = is_on_floor()
 	_update_animation()
 	_update_headlamp()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if _get_selected_hotbar_item() != "conveyor_belt":
+		return
+	if event is InputEventMouseButton and event.pressed:
+		var mb := event as InputEventMouseButton
+		if mb.button_index == MOUSE_BUTTON_WHEEL_UP:
+			_pending_belt_direction = (_pending_belt_direction + 3) % 4
+		elif mb.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			_pending_belt_direction = (_pending_belt_direction + 1) % 4
+
+
+func _get_selected_hotbar_item() -> String:
+	var hb: Node = get_tree().get_first_node_in_group("hotbar")
+	if hb and hb.has_method("get_selected_item_name"):
+		return hb.call("get_selected_item_name") as String
+	return ""
+
+
+func _handle_belt_placement_input() -> void:
+	if Input.is_action_just_pressed("rotate_structure"):
+		_pending_belt_direction = (_pending_belt_direction + 1) % 4
+	if not Input.is_action_just_pressed("place"):
+		return
+	var selected: String = _get_selected_hotbar_item()
+	if selected == "power_pole" and Inventory.has_item("power_pole", 1):
+		var ppos: Vector2 = get_global_mouse_position()
+		var tile_pos: Vector2i = Vector2i(
+			int(floor(ppos.x / float(WorldData.TILE_SIZE))),
+			int(floor(ppos.y / float(WorldData.TILE_SIZE)))
+		)
+		if WorldData.get_tile(tile_pos.x, tile_pos.y + 1) == WorldData.TILE_AIR:
+			return
+		var pole: Node2D = _place_structure_at(
+			"res://power/tier1/power_pole.tscn",
+			ppos.snapped(Vector2(16, 16))
+		)
+		if pole != null:
+			Inventory.remove_item("power_pole", 1)
+		return
+	if selected != "conveyor_belt" or not Inventory.has_item("conveyor_belt", 1):
+		return
+	var place_pos: Vector2 = get_global_mouse_position().snapped(Vector2(16, 16))
+	for belt in get_tree().get_nodes_in_group("conveyors"):
+		if belt is Node2D and (belt as Node2D).global_position.distance_to(place_pos) < 8.0:
+			print("Cannot place: conveyors cannot cross until Tier 2.")
+			return
+	var placed: Node2D = _place_structure_at("res://structures/conveyor_belt.tscn", place_pos)
+	if placed == null:
+		return
+	placed.set("direction", _pending_belt_direction)
+	if Inventory.remove_item("conveyor_belt", 1):
+		pass
+
+
+func _place_structure_at(scene_path: String, world_pos: Vector2) -> Node2D:
+	if not ResourceLoader.exists(scene_path):
+		push_warning("Player: missing scene %s" % scene_path)
+		return null
+	var scene: PackedScene = load(scene_path) as PackedScene
+	var node: Node2D = scene.instantiate() as Node2D
+	if node == null:
+		return null
+	node.global_position = world_pos
+	get_tree().current_scene.add_child(node)
+	return node
+
+
+func _apply_conveyor_push(delta: float) -> void:
+	for belt in get_tree().get_nodes_in_group("conveyors"):
+		if belt is ConveyorBelt:
+			var cb: ConveyorBelt = belt as ConveyorBelt
+			if global_position.distance_to(cb.global_position) < 14.0:
+				velocity += cb.get_push_vector() * delta
+				return
 
 
 func _handle_movement(delta: float) -> void:

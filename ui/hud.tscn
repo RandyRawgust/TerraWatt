@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://b8hudterrawatt01"]
+[gd_scene load_steps=9 format=3 uid="uid://b8hudterrawatt01"]
 
 [ext_resource type="Script" path="res://ui/power_meter.gd" id="1_pm"]
 [ext_resource type="Script" path="res://ui/status_icons.gd" id="2_si"]
@@ -7,28 +7,79 @@
 [ext_resource type="Script" path="res://ui/hotbar.gd" id="5_hb"]
 [ext_resource type="PackedScene" uid="uid://c8statusicon001" path="res://ui/status_icon.tscn" id="6_icon"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.102, 0.102, 0.18, 0.92)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.722, 0.451, 0.2, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
 [node name="HUD" type="CanvasLayer"]
 
-[node name="PowerMeter" type="HBoxContainer" parent="."]
-layout_mode = 1
+[node name="PowerMeter" type="Control" parent="."]
+layout_mode = 3
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -280.0
+offset_left = -196.0
 offset_top = 12.0
-offset_right = -16.0
-offset_bottom = 44.0
+offset_right = -12.0
+offset_bottom = 132.0
 grow_horizontal = 0
-theme_override_constants/separation = 12
 script = ExtResource("1_pm")
 
-[node name="GenLabel" type="Label" parent="PowerMeter"]
+[node name="PanelContainer" type="PanelContainer" parent="PowerMeter"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="PowerMeter/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="GenRow" type="HBoxContainer" parent="PowerMeter/PanelContainer/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StatusLight" type="ColorRect" parent="PowerMeter/PanelContainer/VBox/GenRow"]
+custom_minimum_size = Vector2(12, 12)
+layout_mode = 2
+color = Color(0, 0.8, 0.2, 1)
+
+[node name="GenLabel" type="Label" parent="PowerMeter/PanelContainer/VBox/GenRow"]
 layout_mode = 2
 text = "Gen: 0 W"
 
-[node name="DemLabel" type="Label" parent="PowerMeter"]
+[node name="GenBar" type="ProgressBar" parent="PowerMeter/PanelContainer/VBox"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+show_percentage = false
+max_value = 100.0
+value = 0.0
+modulate = Color(0.75, 1, 0.8, 1)
+
+[node name="DemLabel" type="Label" parent="PowerMeter/PanelContainer/VBox"]
 layout_mode = 2
 text = "Dem: 0 W"
+
+[node name="DemBar" type="ProgressBar" parent="PowerMeter/PanelContainer/VBox"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+show_percentage = false
+max_value = 100.0
+value = 0.0
+modulate = Color(1, 0.82, 0.82, 1)
 
 [node name="LeftStack" type="VBoxContainer" parent="."]
 layout_mode = 1

@@ -42,6 +42,9 @@ func _ready() -> void:
 
 	creature_spawner.set_player(player)
 
+	# Smoke-test Tier 1 grid: start with a few poles in inventory (remove for shipping).
+	Inventory.add_item("power_pole", 5)
+
 	print("Terra.Watt: All systems initialized. Game running.")
 
 
@@ -64,6 +67,12 @@ func _process(delta: float) -> void:
 func _ensure_input_actions() -> void:
 	_add_mouse_button_action("mine", MOUSE_BUTTON_LEFT)
 	_add_mouse_button_action("place", MOUSE_BUTTON_RIGHT)
+	if not InputMap.has_action("rotate_structure"):
+		InputMap.add_action("rotate_structure")
+	if not _action_has_key("rotate_structure", KEY_R):
+		var ev_r := InputEventKey.new()
+		ev_r.keycode = KEY_R
+		InputMap.action_add_event("rotate_structure", ev_r)
 	var keycodes: Array[int] = [
 		KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0
 	]
