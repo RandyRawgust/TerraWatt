@@ -1,0 +1,88 @@
+{
+  "version": "1.0",
+  "aseprite_path": "C:\\Program Files\\Aseprite\\Aseprite.exe",
+  "godot_assets_path": "game/assets",
+  "raw_assets_path": "workshop/raw_assets",
+
+  "characters": {
+    "player": {
+      "frame_w": 24, "frame_h": 40,
+      "output": "game/assets/player/player_sheet.png",
+      "frames": {
+        "idle":    {"file": "player_idle.png",   "status": "needed", "pixellab_spec": "player_idle"},
+        "walk1":   {"file": "player_walk1.png",  "status": "needed", "pixellab_spec": "player_walk1"},
+        "walk2":   {"file": "player_walk2.png",  "status": "needed", "pixellab_spec": "player_walk2"},
+        "walk3":   {"file": "player_walk3.png",  "status": "needed", "pixellab_spec": "player_walk3"},
+        "walk4":   {"file": "player_walk4.png",  "status": "needed", "pixellab_spec": "player_walk4"},
+        "jump":    {"file": "player_jump.png",   "status": "needed", "pixellab_spec": "player_jump"}
+      },
+      "sheet_layout": ["idle", "walk1", "walk2", "walk3", "walk4", "jump"],
+      "sheet_status": "needed"
+    },
+    "wolf": {
+      "frame_w": 32, "frame_h": 20,
+      "output": "game/assets/creatures/wolf_sheet.png",
+      "frames": {
+        "idle":    {"file": "wolf_idle.png",     "status": "needed", "pixellab_spec": "wolf_idle"},
+        "walk1":   {"file": "wolf_walk1.png",    "status": "needed", "pixellab_spec": "wolf_walk1"},
+        "walk2":   {"file": "wolf_walk2.png",    "status": "needed", "pixellab_spec": "wolf_walk2"},
+        "walk3":   {"file": "wolf_walk3.png",    "status": "needed", "pixellab_spec": "wolf_walk3"},
+        "walk4":   {"file": "wolf_walk4.png",    "status": "needed", "pixellab_spec": "wolf_walk4"},
+        "attack":  {"file": "wolf_attack.png",   "status": "needed", "pixellab_spec": "wolf_attack"}
+      },
+      "sheet_layout": ["idle", "walk1", "walk2", "walk3", "walk4", "attack"],
+      "sheet_status": "needed"
+    },
+    "rabbit": {
+      "frame_w": 16, "frame_h": 16,
+      "output": "game/assets/creatures/rabbit_sheet.png",
+      "frames": {
+        "idle":    {"file": "rabbit_idle.png",   "status": "needed", "pixellab_spec": "rabbit_idle"},
+        "hop1":    {"file": "rabbit_hop1.png",   "status": "needed", "pixellab_spec": "rabbit_hop1"},
+        "hop2":    {"file": "rabbit_hop2.png",   "status": "needed", "pixellab_spec": "rabbit_hop2"}
+      },
+      "sheet_layout": ["idle", "hop1", "hop2"],
+      "sheet_status": "needed"
+    },
+    "bird": {
+      "frame_w": 12, "frame_h": 10,
+      "output": "game/assets/creatures/bird_sheet.png",
+      "frames": {
+        "perched": {"file": "bird_perched.png",  "status": "needed", "pixellab_spec": "bird_perched"},
+        "flap1":   {"file": "bird_flap1.png",    "status": "needed", "pixellab_spec": "bird_flap1"},
+        "flap2":   {"file": "bird_flap2.png",    "status": "needed", "pixellab_spec": "bird_flap2"}
+      },
+      "sheet_layout": ["perched", "flap1", "flap2"],
+      "sheet_status": "needed"
+    }
+  },
+
+  "tiles": {
+    "dirt":       {"file": "tile_dirt.png",       "status": "needed", "output": "game/assets/tiles/terrain/dirt.png"},
+    "grass_dirt": {"file": "tile_grass_dirt.png", "status": "needed", "output": "game/assets/tiles/terrain/grass_dirt.png"},
+    "stone":      {"file": "tile_stone.png",      "status": "needed", "output": "game/assets/tiles/terrain/stone.png"},
+    "clay":       {"file": "tile_clay.png",       "status": "needed", "output": "game/assets/tiles/terrain/clay.png"},
+    "coal_ore":   {"file": "tile_coal_ore.png",   "status": "needed", "output": "game/assets/tiles/ores/coal_ore.png"},
+    "copper_ore": {"file": "tile_copper_ore.png", "status": "needed", "output": "game/assets/tiles/ores/copper_ore.png"},
+    "iron_ore":   {"file": "tile_iron_ore.png",   "status": "needed", "output": "game/assets/tiles/ores/iron_ore.png"},
+    "wood_plank": {"file": "tile_wood_plank.png", "status": "needed", "output": "game/assets/tiles/structures/wood_plank.png"}
+  },
+
+  "backgrounds": {
+    "bg_sky":          {"file": "bg_sky.png",          "status": "needed", "output": "game/assets/backgrounds/bg_sky.png"},
+    "bg_industrial":   {"file": "bg_industrial.png",   "status": "needed", "output": "game/assets/backgrounds/bg_industrial_tier1.png"}
+  },
+
+  "power": {
+    "coal_furnace":   {"file": "power_furnace.png",   "status": "needed", "output": "game/assets/power/tier1/furnace.png"},
+    "water_boiler":   {"file": "power_boiler.png",    "status": "needed", "output": "game/assets/power/tier1/water_boiler.png"},
+    "steam_turbine":  {"file": "power_turbine.png",   "status": "needed", "output": "game/assets/power/tier1/steam_turbine.png"},
+    "power_pole":     {"file": "power_pole.png",      "status": "needed", "output": "game/assets/power/tier1/power_pole.png"}
+  },
+
+  "ui": {
+    "hotbar_slot":    {"file": "ui_hotbar_slot.png",  "status": "needed", "output": "game/assets/ui/hotbar_slot.png"},
+    "status_icon_base":{"file": "ui_status_icon.png", "status": "needed", "output": "game/assets/ui/status_icon_base.png"},
+    "light_radial":   {"file": "ui_light_radial.png", "status": "needed", "output": "game/assets/ui/light_radial.png"}
+  }
+}
