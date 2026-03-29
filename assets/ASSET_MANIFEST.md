@@ -2,6 +2,31 @@
 
 All paths are `res://` unless noted. PixelLab job IDs are from generation on 2026-03-29.
 
+## Player (sprite sheet PNG)
+
+| File | PixelLab `create_map_object` ID | Layout | Used by |
+|------|----------------------------------|--------|---------|
+| `assets/player/player_sheet.png` | `b504e3d4-9a33-40e9-a905-4a56b8bdfebe` | 144×40, 6 frames × 24×40 (idle, walk ×4, jump) | `player/player.gd` `_setup_sprite_frames`, `TEXTURE_FILTER_NEAREST` |
+
+Legacy placeholder: `assets/player/player_frames.png` (tiny strip) — superseded by `player_sheet.png`.
+
+## Creatures (sprite sheet PNG)
+
+| File | PixelLab map object ID | Layout | Used by |
+|------|------------------------|--------|---------|
+| `assets/creatures/wolf_sheet.png` | `ad957912-6d19-412a-8c0d-922e477c7f08` | 144×32 sheet, atlas rows `Rect2(i*24, 0, 24, 16)` × 6 | `creatures/wolf.gd` |
+| `assets/creatures/rabbit_sheet.png` | `48613204-b458-484a-afeb-cc3a072b8d35` | 64×32 sheet, 3 columns × up to 16px tall (idle / hop / flee) | `creatures/rabbit.gd` |
+| `assets/creatures/bird_sheet.png` | `120e0fcf-1cef-4352-aa15-3a346aa96b95` | 64×32 sheet, 3 columns × up to 10px tall (perch / fly) | `creatures/bird.gd` |
+
+## Tier 1 art TODO (future)
+
+- Tier 1 coal furnace sprite
+- Tier 1 boiler sprite
+- Tier 1 steam turbine sprite
+- Tier 1 generator sprite
+- Power pole sprites
+- Conveyor belt animation
+
 ## Terrain tiles (16×16 PNG)
 
 | File | PixelLab | Used by |

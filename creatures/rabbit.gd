@@ -12,6 +12,7 @@ var _idle_timer: float = 0.0
 
 func _ready() -> void:
 	add_to_group("creatures")
+	_setup_rabbit_sprite_frames()
 	$AnimatedSprite2D.play("idle")
 	_idle_timer = randf_range(IDLE_WAIT_MIN, IDLE_WAIT_MAX)
 
@@ -37,6 +38,8 @@ func _physics_process(delta: float) -> void:
 	var spr: AnimatedSprite2D = $AnimatedSprite2D
 	if not is_on_floor():
 		spr.play("hop")
+	elif flee and abs(velocity.x) > 8.0:
+		spr.play("flee")
 	else:
 		spr.play("idle")
 	if abs(velocity.x) > 8.0:
@@ -45,3 +48,38 @@ func _physics_process(delta: float) -> void:
 		$Silhouette.scale.x = -1.0 if spr.flip_h else 1.0
 
 	move_and_slide()
+
+
+func _setup_rabbit_sprite_frames() -> void:
+	const RABBIT_TEX: String = "res://assets/creatures/rabbit_sheet.png"
+	if not ResourceLoader.exists(RABBIT_TEX):
+		return
+	var texture: Texture2D = load(RABBIT_TEX) as Texture2D
+	if texture == null:
+		return
+
+	var fw: int = maxi(1, texture.get_width() / 3)
+	var fh: int = maxi(1, mini(texture.get_height(), 16))
+
+	var frames: SpriteFrames = SpriteFrames.new()
+	var append_range := func(anim_name: String, start: int, end: int, fps: float, loop: bool) -> void:
+		frames.add_animation(anim_name)
+		frames.set_animation_loop(anim_name, loop)
+		frames.set_animation_speed(anim_name, fps)
+		for i in range(start, end + 1):
+			var atlas: AtlasTexture = AtlasTexture.new()
+			atlas.atlas = texture
+			atlas.region = Rect2(i * fw, 0, fw, fh)
+			frames.add_frame(anim_name, atlas)
+
+	append_range.call("idle", 0, 0, 1.0, true)
+	append_range.call("hop", 0, 2, 6.0, true)
+	append_range.call("flee", 1, 2, 12.0, true)
+
+	var spr: AnimatedSprite2D = $AnimatedSprite2D
+	spr.sprite_frames = frames
+	spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	spr.visible = true
+	var silhouette: CanvasItem = get_node_or_null("Silhouette") as CanvasItem
+	if silhouette:
+		silhouette.visible = false

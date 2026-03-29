@@ -11,24 +11,27 @@ var _anchor_y: float = 0.0
 func _ready() -> void:
 	add_to_group("creatures")
 	_anchor_y = global_position.y
-	$AnimatedSprite2D.play("flap")
+	_setup_bird_sprite_frames()
+	$AnimatedSprite2D.play("fly")
 	_pick_target()
 
 
 func _process(delta: float) -> void:
+	var spr: AnimatedSprite2D = $AnimatedSprite2D
 	var v: Rect2 = get_viewport().get_visible_rect()
 	_flutter_phase += delta * FLUTTER_SPEED
 
 	global_position.y = _anchor_y + sin(_flutter_phase) * 4.0
 	global_position.x = move_toward(global_position.x, _target_x, FLY_SPEED * delta)
 
-	var spr: AnimatedSprite2D = $AnimatedSprite2D
 	spr.flip_h = global_position.x > _target_x
 	if has_node("Silhouette"):
 		$Silhouette.scale.x = -1.0 if spr.flip_h else 1.0
-
 	if abs(global_position.x - _target_x) < 6.0:
+		spr.play("perch")
 		_pick_target()
+	else:
+		spr.play("fly")
 
 	var cam: Camera2D = get_viewport().get_camera_2d()
 	var world_left: float = v.position.x
@@ -62,3 +65,37 @@ func _respawn_side(v: Rect2, cam: Camera2D) -> void:
 		nx = randf_range(v.position.x + 40.0, v.end.x - 40.0)
 	global_position = Vector2(nx, _anchor_y + randf_range(-12.0, 12.0))
 	_pick_target()
+
+
+func _setup_bird_sprite_frames() -> void:
+	const BIRD_TEX: String = "res://assets/creatures/bird_sheet.png"
+	if not ResourceLoader.exists(BIRD_TEX):
+		return
+	var texture: Texture2D = load(BIRD_TEX) as Texture2D
+	if texture == null:
+		return
+
+	var fw: int = maxi(1, texture.get_width() / 3)
+	var fh: int = maxi(1, mini(texture.get_height(), 10))
+
+	var frames: SpriteFrames = SpriteFrames.new()
+	var add_frames := func(anim_name: String, start: int, end: int, fps: float, loop: bool) -> void:
+		frames.add_animation(anim_name)
+		frames.set_animation_loop(anim_name, loop)
+		frames.set_animation_speed(anim_name, fps)
+		for i in range(start, end + 1):
+			var atlas: AtlasTexture = AtlasTexture.new()
+			atlas.atlas = texture
+			atlas.region = Rect2(i * fw, 0, fw, fh)
+			frames.add_frame(anim_name, atlas)
+
+	add_frames.call("perch", 0, 0, 1.0, true)
+	add_frames.call("fly", 1, 2, 8.0, true)
+
+	var spr: AnimatedSprite2D = $AnimatedSprite2D
+	spr.sprite_frames = frames
+	spr.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	spr.visible = true
+	var silhouette: CanvasItem = get_node_or_null("Silhouette") as CanvasItem
+	if silhouette:
+		silhouette.visible = false
