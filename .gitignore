@@ -1,18 +1,26 @@
-# OS / editor
-Thumbs.db
-Desktop.ini
-.DS_Store
+# Godot
+.godot/
+*.import
+*.translation
+export_presets.cfg
+
+# C++ build artifacts
+*.o
+*.obj
+*.a
+*.so
+*.dll
+*.dylib
+bin/
+
+# IDE
+.cursor/
+.vscode/
 *.swp
-*.swo
 
-# Secrets & local env
-.env
-.env.*
-!.env.example
+# OS
+.DS_Store
+Thumbs.db
 
-# Dependencies & build (uncomment or extend when you add a stack)
-# node_modules/
-# __pycache__/
-# .venv/
-# dist/
-# build/
+# Logs
+*.log
