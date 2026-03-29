@@ -22,6 +22,7 @@ WorldData="*res://world/world_data.gd"
 Inventory="*res://player/inventory.gd"
 PowerGrid="*res://power/power_grid.gd"
 MaterialRegistry="*res://simulation/material_registry.gd"
+PollutionTracker="*res://world/pollution_tracker.gd"
 
 [input]
 

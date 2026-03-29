@@ -65,8 +65,10 @@ func _update_darkness() -> void:
 func _update_sky_tint() -> void:
 	if sky_tint == null:
 		return
-	# Cool night wash over the screen (subtle; underground darkness is separate).
-	sky_tint.color = Color(0.07, 0.1, 0.22, 0.14 * _cycle_night_factor)
+	var pol: float = PollutionTracker.global_pollution_level
+	var base: Color = Color(0.07, 0.1, 0.22, 0.14 * _cycle_night_factor)
+	var smog: Color = Color(0.3, 0.2, 0.06, 0.08 + pol * 0.14)
+	sky_tint.color = base.lerp(smog, pol * 0.55)
 
 
 func _update_ore_glow() -> void:

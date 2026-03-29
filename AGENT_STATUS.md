@@ -174,6 +174,26 @@ EXPORTS:
 
 ---
 
+## Pollution Agent (Tier 1) — March 29, 2026
+STATUS: COMPLETE
+COMPLETED:
+  - `res://world/pollution_tracker.gd` autoload — global 0–1 pollution, dissipation, acid rain threshold / signals
+  - `CoalFurnace`: `add_to_group("coal_furnaces")`, `PollutionTracker.report_coal_burned()` on each coal unit burned
+  - `res://world/pollution_overlay.tscn` + `pollution_overlay.gd` — full-screen haze (CanvasLayer layer 5)
+  - `background.gd` / `background.tscn` — `IndustrialLayer` (smokestack art) visible when pollution > 10%; parallax + day/night modulate
+  - `res://assets/backgrounds/bg_industrial_tier1.png` — placeholder (copy of mid layer until PixelLab silhouette is dropped in)
+  - `res://world/soot_system.gd` — darkens `structures` group near burning `coal_furnaces` (`get_heat_output() > 0`)
+  - `lighting.gd` — sky tint blends with pollution smog for coordinated haze
+  - `main.tscn` — PollutionOverlay + SootSystem; `project.godot` — PollutionTracker autoload
+IN PROGRESS: —
+BLOCKED ON: —
+EXPORTS:
+  - autoload: PollutionTracker.global_pollution_level, report_coal_burned(), signals pollution_changed / acid_rain_*
+  - scene: res://world/pollution_overlay.tscn
+  - groups: coal_furnaces (soot + sim), structures (soot targets)
+
+---
+
 ## Integration Agent — March 28, 2026
 STATUS: COMPLETE
 COMPLETED:
