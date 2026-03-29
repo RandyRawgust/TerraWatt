@@ -1,5 +1,5 @@
 # TERRAWATT — AUTONOMOUS PRINCIPAL ENGINEER DOCTRINE
-# Version: 1.6 | Project-Level Rules
+# Version: 1.7 | Project-Level Rules
 # Install this file at: .cursor/rules/TERRAWATT_DOCTRINE.md
 # Keep root `TERRAWATT_DOCTRINE.md` and `.cursor/rules/TERRAWATT_DOCTRINE.md` identical.
 
@@ -61,6 +61,8 @@ func get_cell(x: int, y: int) -> Dictionary:
 ## RETROSPECTIVE — SESSION LEARNINGS (DO NOT REGRESS)
 
 After each major multi-agent phase, append durable lessons here (and keep root + `.cursor/rules/` copies identical). Prefer **specific failure modes** and **concrete guardrails** over generic advice.
+
+**Doctrine evolution protocol (each retrospective):** Before editing this file, briefly answer: (1) What patterns caused delay, rework, or silent bugs? (2) What did other agents depend on that was not actually ready? (3) Which stubs were used — were they adequate and honestly documented for callers? (4) Which Godot 4 / GDExtension APIs were confused or misapplied? Then add **actionable** bullets or sections (not slogans), bump the version line above, and commit with a `[Retro]` message. Sync **both** `TERRAWATT_DOCTRINE.md` (repo root) and `.cursor/rules/TERRAWATT_DOCTRINE.md`.
 
 These lessons come from multi-agent work: Pixel Sim GDExtension, World Gen / chunk streaming, Visual / TileSet pipelines, and Foundation-era stubs. Read before building sims, extensions, rendering, or cross-agent APIs.
 
