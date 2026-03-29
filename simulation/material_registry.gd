@@ -46,11 +46,11 @@ func _register_defaults() -> void:
 	materials[MAT_DIRT]       = {"name": "Dirt",      "category": "SOLID",  "color": Color(0.55,0.42,0.24), "flammable": false, "mine_time": 0.5}
 	materials[MAT_STONE]      = {"name": "Stone",     "category": "SOLID",  "color": Color(0.42,0.42,0.42), "flammable": false, "mine_time": 1.5}
 	materials[MAT_GRASS_DIRT] = {"name": "Grass",     "category": "SOLID",  "color": Color(0.29,0.49,0.18), "flammable": false, "mine_time": 0.5}
-	materials[MAT_COAL]       = {"name": "Coal",      "category": "SOLID",  "color": Color(0.16,0.16,0.16), "flammable": true,  "mine_time": 1.0, "ignition_temp": 300.0}
+	materials[MAT_COAL]       = {"name": "Coal",      "category": "SOLID",  "color": Color(0.16,0.16,0.16), "flammable": true,  "mine_time": 1.0, "ignition_temp": 300.0, "fuel_value": 30.0}
 	materials[MAT_COPPER_ORE] = {"name": "Copper Ore","category": "SOLID",  "color": Color(0.72,0.45,0.20), "flammable": false, "mine_time": 2.0}
 	materials[MAT_IRON_ORE]   = {"name": "Iron Ore",  "category": "SOLID",  "color": Color(0.54,0.54,0.60), "flammable": false, "mine_time": 2.5}
 	materials[MAT_CLAY]       = {"name": "Clay",      "category": "SOLID",  "color": Color(0.65,0.48,0.35), "flammable": false, "mine_time": 0.7}
-	materials[MAT_WOOD_PLANK] = {"name": "Wood",      "category": "SOLID",  "color": Color(0.45,0.32,0.18), "flammable": true,  "mine_time": 0.4}
+	materials[MAT_WOOD_PLANK] = {"name": "Wood",      "category": "SOLID",  "color": Color(0.45,0.32,0.18), "flammable": true,  "mine_time": 0.4, "ignition_temp": 250.0, "fuel_value": 15.0}
 	materials[MAT_STONE_BRICK]= {"name": "Stone Brick","category": "SOLID", "color": Color(0.48,0.48,0.48), "flammable": false, "mine_time": 1.2}
 	materials[MAT_WATER]      = {"name": "Water",     "category": "LIQUID", "color": Color(0.20,0.50,0.80,0.8), "flammable": false, "density": 1.0}
 	materials[MAT_STEAM]      = {"name": "Steam",     "category": "GAS",    "color": Color(0.85,0.85,0.90,0.5), "flammable": false}

@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://creatures/creature_spawner.gd" id="8_csp"]
 [ext_resource type="Script" uid="uid://cuwul4laa3eml" path="res://world/day_night_cycle.gd" id="9_dnc"]
 [ext_resource type="PackedScene" path="res://world/pollution_overlay.tscn" id="10_po"]
-[ext_resource type="Script" path="res://world/soot_system.gd" id="11_soot"]
+[ext_resource type="Script" uid="uid://igqeldqts6g3" path="res://world/soot_system.gd" id="11_soot"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")

@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://blightmgrterra01"]
+[gd_scene load_steps=2 format=3 uid="uid://byupk0huumkfs"]
 
-[ext_resource type="Script" path="res://world/lighting.gd" id="1_lm"]
+[ext_resource type="Script" uid="uid://b6eo6qmqnmkga" path="res://world/lighting.gd" id="1_lm"]
 
 [node name="LightingManager" type="Node2D"]
 script = ExtResource("1_lm")

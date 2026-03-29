@@ -1,7 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://terrawatt_test_sim"]
+[gd_scene load_steps=3 format=3 uid="uid://7ip62u7tsiii"]
 
-[ext_resource type="Script" path="res://simulation/test_sim.gd" id="1_test"]
-[ext_resource type="Script" path="res://simulation/sim_renderer.gd" id="2_renderer"]
+[ext_resource type="Script" uid="uid://d1xt3alh4y14b" path="res://simulation/test_sim.gd" id="1_test"]
+[ext_resource type="Script" uid="uid://blwd57qcdlabv" path="res://simulation/sim_renderer.gd" id="2_renderer"]
 
 [node name="TestSim" type="Node2D"]
 script = ExtResource("1_test")

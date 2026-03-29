@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8beltinserter01"]
+
+[ext_resource type="Script" path="res://structures/belt_inserter.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_area"]
+size = Vector2(14, 10)
+
+[node name="BeltInserter" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+monitoring = true
+monitorable = false
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_area")

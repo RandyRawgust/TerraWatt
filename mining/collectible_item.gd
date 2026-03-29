@@ -24,6 +24,19 @@ func _ready() -> void:
 
 func _physics_process(_delta: float) -> void:
 	sleeping = false
+	var on_belt: Node2D = null
+	for belt in get_tree().get_nodes_in_group("conveyors"):
+		if belt is Node2D:
+			var dist: float = global_position.distance_to((belt as Node2D).global_position)
+			if dist < 12.0:
+				on_belt = belt as Node2D
+				break
+	for belt in get_tree().get_nodes_in_group("conveyors"):
+		if belt.has_method("register_item") and belt.has_method("unregister_item"):
+			if on_belt != null and belt == on_belt:
+				belt.register_item(self)
+			else:
+				belt.unregister_item(self)
 
 
 func _apply_icon() -> void:

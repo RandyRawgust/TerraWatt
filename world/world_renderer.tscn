@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://cworldrenderer001"]
+[gd_scene load_steps=2 format=3 uid="uid://i4jsbv6micei"]
 
-[ext_resource type="Script" path="res://world/world_renderer.gd" id="1_wr"]
+[ext_resource type="Script" uid="uid://c4nsr88d053l1" path="res://world/world_renderer.gd" id="1_wr"]
 
 [node name="WorldRenderer" type="Node2D"]
 script = ExtResource("1_wr")

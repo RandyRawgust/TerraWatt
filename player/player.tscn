@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://xhegm4r2hki"]
+[gd_scene load_steps=8 format=3 uid="uid://xhegm4r2hki"]
 
 [ext_resource type="Script" uid="uid://b5oxic1b2fjr6" path="res://player/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://mining/mining_system.gd" id="2_mine"]
 [ext_resource type="Script" path="res://mining/mine_progress_indicator.gd" id="3_prog"]
 [ext_resource type="Script" uid="uid://cabx7ou4hr4gp" path="res://player/player_status.gd" id="4_stat"]
 [ext_resource type="Texture2D" uid="uid://4q2afws2kukc" path="res://assets/ui/light_radial.png" id="5_light"]
+[ext_resource type="Script" path="res://player/machine_interactor.gd" id="6_interact"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_player"]
 radius = 5.0
@@ -46,3 +47,6 @@ script = ExtResource("3_prog")
 
 [node name="PlayerStatus" type="Node" parent="."]
 script = ExtResource("4_stat")
+
+[node name="MachineInteractor" type="Node" parent="."]
+script = ExtResource("6_interact")
