@@ -77,8 +77,9 @@ func _build_placeholder_tileset() -> TileSet:
 	for tid in range(1, 10):
 		atlas.create_tile(Vector2i(tid - 1, 0))
 	var ts := TileSet.new()
-	ts.add_physics_layer(1, 0xFFFFFFFF, null)
+	ts.add_physics_layer()
 	ts.set_physics_layer_collision_layer(0, 1)
+	ts.set_physics_layer_collision_mask(0, 1)
 	ts.add_source(atlas, 0)
 	for tid in range(1, 10):
 		var td: TileData = atlas.get_tile_data(Vector2i(tid - 1, 0), 0)

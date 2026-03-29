@@ -32,8 +32,9 @@ func _run() -> void:
 
 static func _build_tile_set() -> TileSet:
 	var tile_set: TileSet = TileSet.new()
-	tile_set.add_physics_layer(1, 0xFFFFFFFF, null)
+	tile_set.add_physics_layer()
 	tile_set.set_physics_layer_collision_layer(0, 1)
+	tile_set.set_physics_layer_collision_mask(0, 1)
 	var rect: PackedVector2Array = PackedVector2Array([
 		Vector2(0, 0),
 		Vector2(TILE_SIZE.x, 0),
