@@ -45,7 +45,8 @@ var dirty_chunks: Dictionary = {}
 var world_seed: int = 0
 
 ## terrawatt_tileset: one TileSetAtlasSource per ID; source_id == tile_id - 1 for 1..9.
-static func tile_id_to_source_id(tile_id: int) -> int:
+## Instance method (not static) so autoload calls resolve cleanly vs. analyzer warnings.
+func tile_id_to_source_id(tile_id: int) -> int:
 	return tile_id - 1
 
 

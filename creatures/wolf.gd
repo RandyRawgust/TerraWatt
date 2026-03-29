@@ -15,7 +15,7 @@ func _ready() -> void:
 	add_to_group("creatures")
 	add_to_group("hostile_creatures")
 	_setup_wolf_sprite_frames()
-	$AnimatedSprite2D.play("idle")
+	_play_anim_if($AnimatedSprite2D, &"idle")
 
 
 func _physics_process(delta: float) -> void:
@@ -30,11 +30,11 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	var spr: AnimatedSprite2D = $AnimatedSprite2D
 	if _target and global_position.distance_to(_target.global_position) > ATTACK_RANGE:
-		spr.play("walk")
+		_play_anim_if(spr, &"walk")
 	elif _target:
-		spr.play("attack")
+		_play_anim_if(spr, &"attack")
 	else:
-		spr.play("idle")
+		_play_anim_if(spr, &"idle")
 	if _target:
 		spr.flip_h = _target.global_position.x < global_position.x
 	if has_node("Silhouette"):
@@ -75,9 +75,11 @@ func _attack_cooldown_tick(delta: float) -> void:
 func _setup_wolf_sprite_frames() -> void:
 	const WOLF_TEX: String = "res://assets/creatures/wolf_sheet.png"
 	if not ResourceLoader.exists(WOLF_TEX):
+		push_warning("wolf.gd: sprite sheet missing, skipping setup")
 		return
 	var texture: Texture2D = load(WOLF_TEX) as Texture2D
 	if texture == null:
+		push_warning("wolf.gd: could not load sprite sheet")
 		return
 
 	var frames: SpriteFrames = SpriteFrames.new()
@@ -102,3 +104,8 @@ func _setup_wolf_sprite_frames() -> void:
 	var silhouette: CanvasItem = get_node_or_null("Silhouette") as CanvasItem
 	if silhouette:
 		silhouette.visible = false
+
+
+func _play_anim_if(spr: AnimatedSprite2D, anim_name: StringName) -> void:
+	if spr != null and spr.sprite_frames != null and spr.sprite_frames.has_animation(anim_name):
+		spr.play(anim_name)

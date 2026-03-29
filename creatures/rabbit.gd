@@ -13,7 +13,7 @@ var _idle_timer: float = 0.0
 func _ready() -> void:
 	add_to_group("creatures")
 	_setup_rabbit_sprite_frames()
-	$AnimatedSprite2D.play("idle")
+	_play_anim_if($AnimatedSprite2D, &"idle")
 	_idle_timer = randf_range(IDLE_WAIT_MIN, IDLE_WAIT_MAX)
 
 
@@ -37,11 +37,11 @@ func _physics_process(delta: float) -> void:
 
 	var spr: AnimatedSprite2D = $AnimatedSprite2D
 	if not is_on_floor():
-		spr.play("hop")
+		_play_anim_if(spr, &"hop")
 	elif flee and abs(velocity.x) > 8.0:
-		spr.play("flee")
+		_play_anim_if(spr, &"flee")
 	else:
-		spr.play("idle")
+		_play_anim_if(spr, &"idle")
 	if abs(velocity.x) > 8.0:
 		spr.flip_h = velocity.x < 0
 	if has_node("Silhouette"):
@@ -53,12 +53,14 @@ func _physics_process(delta: float) -> void:
 func _setup_rabbit_sprite_frames() -> void:
 	const RABBIT_TEX: String = "res://assets/creatures/rabbit_sheet.png"
 	if not ResourceLoader.exists(RABBIT_TEX):
+		push_warning("rabbit.gd: sprite sheet missing, skipping setup")
 		return
 	var texture: Texture2D = load(RABBIT_TEX) as Texture2D
 	if texture == null:
+		push_warning("rabbit.gd: could not load sprite sheet")
 		return
 
-	var fw: int = maxi(1, texture.get_width() / 3)
+	var fw: int = maxi(1, int(floor(texture.get_width() / 3.0)))
 	var fh: int = maxi(1, mini(texture.get_height(), 16))
 
 	var frames: SpriteFrames = SpriteFrames.new()
@@ -83,3 +85,8 @@ func _setup_rabbit_sprite_frames() -> void:
 	var silhouette: CanvasItem = get_node_or_null("Silhouette") as CanvasItem
 	if silhouette:
 		silhouette.visible = false
+
+
+func _play_anim_if(spr: AnimatedSprite2D, anim_name: StringName) -> void:
+	if spr != null and spr.sprite_frames != null and spr.sprite_frames.has_animation(anim_name):
+		spr.play(anim_name)

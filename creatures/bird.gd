@@ -12,7 +12,7 @@ func _ready() -> void:
 	add_to_group("creatures")
 	_anchor_y = global_position.y
 	_setup_bird_sprite_frames()
-	$AnimatedSprite2D.play("fly")
+	_play_anim_if($AnimatedSprite2D, &"fly")
 	_pick_target()
 
 
@@ -28,10 +28,10 @@ func _process(delta: float) -> void:
 	if has_node("Silhouette"):
 		$Silhouette.scale.x = -1.0 if spr.flip_h else 1.0
 	if abs(global_position.x - _target_x) < 6.0:
-		spr.play("perch")
+		_play_anim_if(spr, &"perch")
 		_pick_target()
 	else:
-		spr.play("fly")
+		_play_anim_if(spr, &"fly")
 
 	var cam: Camera2D = get_viewport().get_camera_2d()
 	var world_left: float = v.position.x
@@ -70,12 +70,14 @@ func _respawn_side(v: Rect2, cam: Camera2D) -> void:
 func _setup_bird_sprite_frames() -> void:
 	const BIRD_TEX: String = "res://assets/creatures/bird_sheet.png"
 	if not ResourceLoader.exists(BIRD_TEX):
+		push_warning("bird.gd: sprite sheet missing, skipping setup")
 		return
 	var texture: Texture2D = load(BIRD_TEX) as Texture2D
 	if texture == null:
+		push_warning("bird.gd: could not load sprite sheet")
 		return
 
-	var fw: int = maxi(1, texture.get_width() / 3)
+	var fw: int = maxi(1, int(floor(texture.get_width() / 3.0)))
 	var fh: int = maxi(1, mini(texture.get_height(), 10))
 
 	var frames: SpriteFrames = SpriteFrames.new()
@@ -99,3 +101,8 @@ func _setup_bird_sprite_frames() -> void:
 	var silhouette: CanvasItem = get_node_or_null("Silhouette") as CanvasItem
 	if silhouette:
 		silhouette.visible = false
+
+
+func _play_anim_if(spr: AnimatedSprite2D, anim_name: StringName) -> void:
+	if spr != null and spr.sprite_frames != null and spr.sprite_frames.has_animation(anim_name):
+		spr.play(anim_name)

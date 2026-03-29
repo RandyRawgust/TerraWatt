@@ -13,15 +13,20 @@ func _ready() -> void:
 	PollutionTracker.pollution_changed.connect(_on_pollution_changed)
 	var vp := get_viewport()
 	if vp != null:
-		_on_viewport_resized()
+		call_deferred("_apply_haze_rect_layout")
 		if not vp.size_changed.is_connected(_on_viewport_resized):
 			vp.size_changed.connect(_on_viewport_resized)
 	_on_pollution_changed(PollutionTracker.global_pollution_level)
 
 
 func _on_viewport_resized() -> void:
-	if haze_rect != null:
-		haze_rect.size = get_viewport().get_visible_rect().size
+	call_deferred("_apply_haze_rect_layout")
+
+
+func _apply_haze_rect_layout() -> void:
+	if haze_rect == null:
+		return
+	haze_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 
 func _on_pollution_changed(level: float) -> void:
