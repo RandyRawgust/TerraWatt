@@ -16,8 +16,8 @@ const _SOURCES: Array[String] = [
 	"res://assets/tiles/ores/copper_ore.png",
 	"res://assets/tiles/ores/iron_ore.png",
 	"res://assets/tiles/terrain/clay.png",
-	"res://assets/tiles/structures/wood_plank.png",
-	"res://assets/tiles/structures/stone_brick.png",
+	"res://assets/structures/wood_plank.png",
+	"res://assets/structures/stone_brick.png",
 ]
 
 

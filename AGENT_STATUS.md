@@ -75,7 +75,7 @@ COMPLETED:
   - world_renderer.gd / world_renderer.tscn: TileMap + placeholder atlas (MaterialRegistry colors)
   - spawn_locator.gd: surface-based spawn in pixel coords
   - main.tscn wires WorldRenderer + Camera2D; main.gd initializes seed and camera follow
-  - tests/world_gen_test.gd: headless checks (run with Godot -s res://tests/world_gen_test.gd)
+  - scripts/world_gen_test.gd: headless checks (run with Godot -s res://scripts/world_gen_test.gd)
 IN PROGRESS: —
 BLOCKED ON: —
 EXPORTS:

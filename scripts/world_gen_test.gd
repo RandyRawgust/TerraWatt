@@ -1,4 +1,4 @@
-# Headless verification for World Gen Agent (run: godot --headless -s res://tests/world_gen_test.gd)
+# Headless verification for World Gen Agent (run: godot --headless -s res://scripts/world_gen_test.gd)
 extends SceneTree
 
 
