@@ -27,7 +27,6 @@ func _ready() -> void:
 	if tile_map.tile_set == null:
 		tile_map.tile_set = _build_placeholder_tileset()
 		_use_multi_source_tileset = false
-	tile_map.collision_layer = 1
 	WorldData.tile_changed.connect(_on_tile_changed)
 	WorldData.chunk_loaded.connect(_on_chunk_loaded)
 	WorldData.chunk_unloaded.connect(_on_chunk_unloaded)
