@@ -20,7 +20,8 @@ func _physics_process(delta: float) -> void:
 	var player: Node2D = get_tree().get_first_node_in_group("player") as Node2D
 	var flee: bool = player != null and global_position.distance_to(player.global_position) < FLEE_DISTANCE
 
-	velocity.y += GRAVITY * delta
+	if not is_on_floor():
+		velocity.y += GRAVITY * delta
 
 	if flee and player:
 		var away: Vector2 = (global_position - player.global_position).normalized()

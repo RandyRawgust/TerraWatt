@@ -20,12 +20,13 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	_seek_target()
 	_attack_cooldown_tick(delta)
+	if not is_on_floor():
+		velocity.y += 900.0 * delta
 	if _target:
 		_move_toward_target(delta)
 	else:
-		velocity = velocity.move_toward(Vector2.ZERO, 400.0 * delta)
-		velocity.y += 900.0 * delta
-		move_and_slide()
+		velocity.x = move_toward(velocity.x, 0.0, 400.0 * delta)
+	move_and_slide()
 	var spr: AnimatedSprite2D = $AnimatedSprite2D
 	if _target and global_position.distance_to(_target.global_position) > ATTACK_RANGE:
 		spr.play("walk")
@@ -47,17 +48,15 @@ func _seek_target() -> void:
 		_target = null
 
 
-func _move_toward_target(delta: float) -> void:
+func _move_toward_target(_delta: float) -> void:
 	if not _target:
 		return
 	var dir: Vector2 = (_target.global_position - global_position).normalized()
 	if global_position.distance_to(_target.global_position) > ATTACK_RANGE:
 		velocity.x = dir.x * MOVE_SPEED
-		velocity.y += 900.0 * delta # gravity
 	else:
 		velocity.x = 0.0
 		_try_attack()
-	move_and_slide()
 
 
 func _try_attack() -> void:
