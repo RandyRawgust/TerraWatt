@@ -11,6 +11,7 @@ class_name BackgroundLayer
 @onready var layer_near: Sprite2D = $LayerNear
 
 var _camera_last_pos: Vector2 = Vector2.ZERO
+var _parallax_initialized: bool = false
 
 
 func _ready() -> void:
@@ -29,6 +30,11 @@ func _fit_layers_to_viewport() -> void:
 
 
 func update_parallax(camera_pos: Vector2) -> void:
+	global_position = camera_pos
+	if not _parallax_initialized:
+		_parallax_initialized = true
+		_camera_last_pos = camera_pos
+		return
 	var delta_pos: Vector2 = camera_pos - _camera_last_pos
 	layer_far.position -= delta_pos * 0.05
 	layer_mid.position -= delta_pos * 0.15

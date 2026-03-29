@@ -92,15 +92,21 @@ EXPORTS:
 
 ---
 
-## Visual & Art Agent — [DATE]
-STATUS: NOT STARTED
-COMPLETED: —
+## Visual & Art Agent — March 28, 2026
+STATUS: COMPLETE
+COMPLETED:
+  - 9× terrain/ore/structure tiles via PixelLab MCP (`create_tiles_pro`); parallax + light radial via `create_map_object`
+  - PNGs under `res://assets/tiles/`, `res://assets/backgrounds/`, `res://assets/ui/light_radial.png`
+  - `scripts/create_tileset.gd` (EditorScript) builds `terrawatt_tileset.tres` — run once in Godot File → Run
+  - `world/background.tscn` + `background.gd`; `world/lighting.tscn` + `lighting.gd` (darkness + ore glow)
+  - `res://assets/ASSET_MANIFEST.md` listing all assets
+  - `main.tscn` wires background + lighting; `WorldRenderer` + `WorldData` tile_id 8–9 (wood plank, stone brick)
 IN PROGRESS: —
-BLOCKED ON: World Gen Agent (for TileMap setup)
+BLOCKED ON: —
 EXPORTS:
   - All tile sprites in res://assets/tiles/
-  - All player sprites in res://assets/player/
   - scene: res://world/background.tscn
+  - scene: res://world/lighting.tscn
   - Completed asset list in res://assets/ASSET_MANIFEST.md
 
 ---

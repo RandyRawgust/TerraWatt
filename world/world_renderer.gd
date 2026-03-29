@@ -9,14 +9,24 @@ class_name WorldRenderer
 
 @onready var tile_map: TileMap = $TileMap
 
+const TERRAWATT_TILESET_PATH: String = "res://assets/tiles/terrawatt_tileset.tres"
+
 @export var render_radius_chunks: int = 4
 @export var unload_extra_chunks: int = 2
 
 var _camera_ref: Camera2D = null
+var _use_multi_source_tileset: bool = false
 
 
 func _ready() -> void:
-	tile_map.tile_set = _build_placeholder_tileset()
+	if ResourceLoader.exists(TERRAWATT_TILESET_PATH):
+		var ts: TileSet = load(TERRAWATT_TILESET_PATH) as TileSet
+		if ts != null:
+			tile_map.tile_set = ts
+			_use_multi_source_tileset = ts.get_source_count() > 1
+	if tile_map.tile_set == null:
+		tile_map.tile_set = _build_placeholder_tileset()
+		_use_multi_source_tileset = false
 	tile_map.collision_layer = 1
 	WorldData.tile_changed.connect(_on_tile_changed)
 	WorldData.chunk_loaded.connect(_on_chunk_loaded)
@@ -40,6 +50,7 @@ func _process(_delta: float) -> void:
 
 
 func _build_placeholder_tileset() -> TileSet:
+	# colors[tile_id] for 1..9; index 0 unused (air).
 	var colors: Array[Color] = [
 		Color(0, 0, 0, 0),
 		Color(0.55, 0.42, 0.24),
@@ -52,25 +63,25 @@ func _build_placeholder_tileset() -> TileSet:
 		Color(0.45, 0.32, 0.18),
 		Color(0.48, 0.46, 0.44),
 	]
-	var img := Image.create(16 * colors.size(), 16, false, Image.FORMAT_RGBA8)
-	for i in colors.size():
-		var c: Color = colors[i]
+	var cols: int = 9
+	var img := Image.create(16 * cols, 16, false, Image.FORMAT_RGBA8)
+	for tid in range(1, 10):
+		var c: Color = colors[tid]
 		for ox in range(16):
 			for oy in range(16):
-				img.set_pixel(i * 16 + ox, oy, c)
+				img.set_pixel((tid - 1) * 16 + ox, oy, c)
 	var tex := ImageTexture.create_from_image(img)
 	var atlas := TileSetAtlasSource.new()
 	atlas.texture = tex
 	atlas.texture_region_size = Vector2i(16, 16)
-	for i in colors.size():
-		atlas.create_tile(Vector2i(i, 0))
+	for tid in range(1, 10):
+		atlas.create_tile(Vector2i(tid - 1, 0))
 	var ts := TileSet.new()
 	ts.add_physics_layer(1, 0xFFFFFFFF, null)
+	ts.set_physics_layer_collision_layer(0, 1)
 	ts.add_source(atlas, 0)
-	for i in colors.size():
-		if i == 0:
-			continue
-		var td: TileData = atlas.get_tile_data(Vector2i(i, 0), 0)
+	for tid in range(1, 10):
+		var td: TileData = atlas.get_tile_data(Vector2i(tid - 1, 0), 0)
 		td.add_collision_polygon(0)
 		td.set_collision_polygon_points(
 			0,
@@ -85,6 +96,17 @@ func _build_placeholder_tileset() -> TileSet:
 	return ts
 
 
+func _paint_cell(layer: int, pos: Vector2i, tile_id: int) -> void:
+	if tile_id == WorldData.TILE_AIR:
+		tile_map.erase_cell(layer, pos)
+		return
+	if _use_multi_source_tileset:
+		var sid: int = WorldData.tile_id_to_source_id(tile_id)
+		tile_map.set_cell(layer, pos, sid, Vector2i(0, 0))
+	else:
+		tile_map.set_cell(layer, pos, 0, Vector2i(tile_id - 1, 0))
+
+
 func _render_chunk(chunk_pos: Vector2i) -> void:
 	var base_x: int = chunk_pos.x * WorldData.CHUNK_SIZE
 	var base_y: int = chunk_pos.y * WorldData.CHUNK_SIZE
@@ -93,11 +115,11 @@ func _render_chunk(chunk_pos: Vector2i) -> void:
 			var world_x: int = base_x + local_x
 			var world_y: int = base_y + local_y
 			var tile_id: int = WorldData.get_tile(world_x, world_y)
-			tile_map.set_cell(0, Vector2i(world_x, world_y), 0, Vector2i(tile_id, 0))
+			_paint_cell(0, Vector2i(world_x, world_y), tile_id)
 
 
 func _on_tile_changed(pos: Vector2i, _old_id: int, new_id: int) -> void:
-	tile_map.set_cell(0, pos, 0, Vector2i(new_id, 0))
+	_paint_cell(0, pos, new_id)
 
 
 func _on_chunk_loaded(chunk_pos: Vector2i) -> void:

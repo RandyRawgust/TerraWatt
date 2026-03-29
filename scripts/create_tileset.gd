@@ -3,7 +3,6 @@
 # PURPOSE: Build res://assets/tiles/terrawatt_tileset.tres from PNGs. Run once in Godot:
 #   Script Editor → open this file → File → Run (or attach as EditorScript).
 
-@tool
 extends EditorScript
 
 const TILE_SIZE: Vector2i = Vector2i(16, 16)
@@ -34,6 +33,7 @@ func _run() -> void:
 static func _build_tile_set() -> TileSet:
 	var tile_set: TileSet = TileSet.new()
 	tile_set.add_physics_layer(1, 0xFFFFFFFF, null)
+	tile_set.set_physics_layer_collision_layer(0, 1)
 	var rect: PackedVector2Array = PackedVector2Array([
 		Vector2(0, 0),
 		Vector2(TILE_SIZE.x, 0),
