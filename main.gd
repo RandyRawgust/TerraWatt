@@ -42,6 +42,9 @@ func _ready() -> void:
 
 	creature_spawner.set_player(player)
 
+	PollutionTracker.acid_rain_started.connect(_on_acid_rain_started)
+	PollutionTracker.acid_rain_stopped.connect(_on_acid_rain_stopped)
+
 	# Smoke-test Tier 1 grid: start with a few poles in inventory (remove for shipping).
 	Inventory.add_item("power_pole", 5)
 
@@ -107,3 +110,12 @@ func _action_has_key(action_name: String, keycode: int) -> bool:
 		if ev is InputEventKey and (ev as InputEventKey).keycode == keycode:
 			return true
 	return false
+
+
+func _on_acid_rain_started() -> void:
+	background_layer.modulate = Color(0.85, 0.9, 0.8)
+	print("Acid rain has begun.")
+
+
+func _on_acid_rain_stopped() -> void:
+	background_layer.modulate = Color(1.0, 1.0, 1.0)

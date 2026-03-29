@@ -272,16 +272,21 @@ EXPORTS:
 
 ---
 
-## Integration Agent — March 28, 2026
+## Integration Agent — March 29, 2026 (Tier 1 wiring)
 STATUS: COMPLETE
 COMPLETED:
-  - main.tscn: SimRenderer, WorldRenderer, BackgroundLayer, LightingManager, Player, GameCamera, DayNightCycle, CreatureSpawner, HUD (CanvasLayer)
-  - main.gd: WORLD_SEED, SpawnLocator, camera follow, world renderer + lighting + HUD wiring, creature_spawner.set_player, input actions (mine/place/hotbar_*), day/night blend to LightingManager + BackgroundLayer
+  - main.tscn: SimRenderer, WorldRenderer, BackgroundLayer, LightingManager, Player, GameCamera, DayNightCycle, CreatureSpawner, PollutionOverlay, SootSystem, HUD (CanvasLayer)
+  - main.gd: WORLD_SEED, SpawnLocator, camera follow, world renderer + lighting + HUD wiring, creature_spawner.set_player, input actions (mine/place/hotbar_*/rotate_structure fallback), day/night blend to LightingManager + BackgroundLayer
+  - main.gd: PollutionTracker.acid_rain_started/stopped → BackgroundLayer modulate tint (green-grey / reset)
+  - project.godot [input]: mine (LMB), place (RMB), interact (E), hotbar_1–9 + hotbar_0 (keys 1–9, 0); PollutionTracker autoload
+  - player/machine_interactor.gd: uses Input action `interact` (remappable) instead of raw KEY_E
   - creatures/creature_spawner.gd: wolves at night (30+ tiles), rabbits day (40–80), birds (20–60), caps + despawn >100 tiles
   - world/day_night_cycle.gd: 10 min day / 5 min night, get_night_blend + is_night
-  - world/lighting.tscn + lighting.gd: SkyTint for cycle; background.gd: set_cycle_night_factor
+  - world/lighting.tscn + lighting.gd: SkyTint for cycle; background.gd: set_cycle_night_factor + industrial layer @ pollution > 10%
   - simulation/sim_renderer.tscn; player Camera2D current=false for root GameCamera
 IN PROGRESS: —
 BLOCKED ON: —
 EXPORTS:
-  - Runnable game from res://main.tscn; integration wiring as above
+  - Runnable game from res://main.tscn; Tier 1 systems spawned/placed in-world (structures, poles, conveyors) — not hardcoded in main.tscn
+NOTE:
+  - Tier 1 30-point play checklist in `agentprompts/t-1/AGENTS_T1_3456_REMAINING.md` — run F5 locally (Godot not on agent PATH); DLL optional for Scope 1 regression with C++ sim message
