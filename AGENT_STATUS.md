@@ -29,16 +29,23 @@ EXPORTS:
 
 ---
 
-## Pixel Sim Agent — [DATE]
-STATUS: NOT STARTED
-COMPLETED: —
+## Pixel Sim Agent — March 28, 2026
+STATUS: COMPLETE (build C++ locally — see simulation/gdextension/SConstruct)
+COMPLETED:
+  - GDExtension sources: simulation/gdextension/src/ (SimCore, TerrawattSimNode, materials)
+  - sim_manager.gd integrated with TerrawattSimNode + physics step
+  - sim_renderer.gd + simulation/test_sim.tscn integration test
+  - MaterialRegistry: MAT_COAL_DUST, MAT_EMBERS + colors
 IN PROGRESS: —
 BLOCKED ON: —
 EXPORTS:
   - autoload: SimManager.get_cell(x, y) → Dictionary {material_id, temperature, flags}
   - autoload: SimManager.set_cell(x, y, material_id)
   - autoload: SimManager.add_particle(x, y, material_id)
+  - autoload: SimManager.get_sim_width() / get_sim_height() / get_sim_node()
   - signal: SimManager.cell_changed(x, y, material_id)
+  - scene: res://simulation/test_sim.tscn
+  - C++ class: TerrawattSimNode (after scons build + DLL in res://bin/)
 
 ---
 
@@ -95,14 +102,22 @@ EXPORTS:
 
 ---
 
-## Power Tier 0 Agent — [DATE]
-STATUS: NOT STARTED
-COMPLETED: —
+## Power Tier 0 Agent — March 28, 2026
+STATUS: COMPLETE
+COMPLETED:
+  - PowerGrid: source registration, totals, get_local_power (10-tile radius), stale entry cleanup, power_updated signal
+  - PowerSourceBase: max/current output, grid registration, operating flag
+  - WaterWheel: SimManager water-cell sampling, 0–50W, placeholder AnimatedSprite2D frames
+  - Windmill: sinusoidal wind, 5–80W when surface-valid (tile Y <= WorldData.get_surface_y + 5)
+  - SteamEngine: wood/water consumption, steam/smoke particles via SimManager, idle/operate animation
+  - Scenes: water_wheel.tscn, windmill.tscn, steam_engine.tscn (collision + sprites; placeholder texture res://assets/power/placeholder_8x8.png)
 IN PROGRESS: —
-BLOCKED ON: World Gen Agent (tile placement), Pixel Sim Agent (water/steam)
+BLOCKED ON: —
 EXPORTS:
   - autoload: PowerGrid.get_local_power(pos) → float (watts)
-  - autoload: PowerGrid.register_source(node, watts)
+  - autoload: PowerGrid.register_source(node, watts), unregister_source, update_source_output
+  - signal: PowerGrid.power_updated(generation, demand)
+  - class: PowerSourceBase — extend for Tier 0 generators
   - scene: res://power/sources/water_wheel.tscn
   - scene: res://power/sources/windmill.tscn
   - scene: res://power/sources/steam_engine.tscn

@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqj8windmilltw001"]
+
+[ext_resource type="Script" path="res://power/sources/windmill.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_col"]
+size = Vector2(32, 56)
+
+[node name="Windmill" type="StaticBody2D"]
+script = ExtResource("1_script")
+
+[node name="BladeSprite" type="AnimatedSprite2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_col")
