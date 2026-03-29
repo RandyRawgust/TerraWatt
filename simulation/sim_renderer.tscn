@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://csimrendererterra1"]
+
+[ext_resource type="Script" path="res://simulation/sim_renderer.gd" id="1_sr"]
+
+[node name="SimRenderer" type="Node2D"]
+z_index = -20
+script = ExtResource("1_sr")

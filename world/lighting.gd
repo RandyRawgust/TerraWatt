@@ -17,9 +17,11 @@ const _ORE_COLORS: Dictionary = {
 }
 
 @onready var darkness_overlay: ColorRect = $DarkCanvas/DarknessOverlay
+@onready var sky_tint: ColorRect = $DarkCanvas/SkyTint
 @onready var _ore_container: Node2D = $OreGlowLights
 
 var player_light: PointLight2D = null
+var _cycle_night_factor: float = 0.0
 
 const DARK_START_Y: int = 10
 const DARK_FULL_Y: int = 80
@@ -37,9 +39,14 @@ func set_player_light(light: PointLight2D) -> void:
 	player_light = light
 
 
+func set_cycle_night_factor(f: float) -> void:
+	_cycle_night_factor = clampf(f, 0.0, 1.0)
+
+
 func _process(_delta: float) -> void:
 	_update_darkness()
 	_update_ore_glow()
+	_update_sky_tint()
 
 
 func _update_darkness() -> void:
@@ -53,6 +60,13 @@ func _update_darkness() -> void:
 		1.0
 	)
 	darkness_overlay.color = Color(0, 0, 0, darkness_t * MAX_DARKNESS)
+
+
+func _update_sky_tint() -> void:
+	if sky_tint == null:
+		return
+	# Cool night wash over the screen (subtle; underground darkness is separate).
+	sky_tint.color = Color(0.07, 0.1, 0.22, 0.14 * _cycle_night_factor)
 
 
 func _update_ore_glow() -> void:

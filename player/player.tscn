@@ -31,7 +31,7 @@ texture_scale = 0.6
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(0, -16)
-current = true
+current = false
 position_smoothing_enabled = true
 
 [node name="MiningSystem" type="Node2D" parent="."]

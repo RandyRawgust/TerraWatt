@@ -1,20 +1,36 @@
-[gd_scene load_steps=6 format=3 uid="uid://bqj8mainterra001"]
+[gd_scene load_steps=10 format=3 uid="uid://bqj8mainterra001"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_main"]
 [ext_resource type="PackedScene" uid="uid://bgtwbackground001" path="res://world/background.tscn" id="2_bg"]
 [ext_resource type="PackedScene" uid="uid://cworldrenderer001" path="res://world/world_renderer.tscn" id="3_wr"]
 [ext_resource type="PackedScene" uid="uid://cplayerterra001" path="res://player/player.tscn" id="4_pl"]
 [ext_resource type="PackedScene" uid="uid://blightmgrterra01" path="res://world/lighting.tscn" id="5_lm"]
+[ext_resource type="PackedScene" path="res://simulation/sim_renderer.tscn" id="6_sim"]
+[ext_resource type="PackedScene" uid="uid://b8hudterrawatt01" path="res://ui/hud.tscn" id="7_hud"]
+[ext_resource type="Script" path="res://creatures/creature_spawner.gd" id="8_csp"]
+[ext_resource type="Script" path="res://world/day_night_cycle.gd" id="9_dnc"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
 
-[node name="BackgroundLayer" parent="." instance=ExtResource("2_bg")]
+[node name="SimRenderer" parent="." instance=ExtResource("6_sim")]
 
 [node name="WorldRenderer" parent="." instance=ExtResource("3_wr")]
 
-[node name="Player" parent="." instance=ExtResource("4_pl")]
+[node name="BackgroundLayer" parent="." instance=ExtResource("2_bg")]
 
 [node name="LightingManager" parent="." instance=ExtResource("5_lm")]
 
-[node name="HUD" type="Node2D" parent="."]
+[node name="Player" parent="." instance=ExtResource("4_pl")]
+
+[node name="GameCamera" type="Camera2D" parent="."]
+current = true
+position_smoothing_enabled = false
+
+[node name="DayNightCycle" type="Node" parent="."]
+script = ExtResource("9_dnc")
+
+[node name="CreatureSpawner" type="Node" parent="."]
+script = ExtResource("8_csp")
+
+[node name="HUD" parent="." instance=ExtResource("7_hud")]

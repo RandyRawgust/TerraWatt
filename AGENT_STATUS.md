@@ -155,9 +155,16 @@ EXPORTS:
 
 ---
 
-## Integration Agent — [DATE]
-STATUS: WAITING (runs last, after all others reach COMPLETE)
-COMPLETED: —
+## Integration Agent — March 28, 2026
+STATUS: COMPLETE
+COMPLETED:
+  - main.tscn: SimRenderer, WorldRenderer, BackgroundLayer, LightingManager, Player, GameCamera, DayNightCycle, CreatureSpawner, HUD (CanvasLayer)
+  - main.gd: WORLD_SEED, SpawnLocator, camera follow, world renderer + lighting + HUD wiring, creature_spawner.set_player, input actions (mine/place/hotbar_*), day/night blend to LightingManager + BackgroundLayer
+  - creatures/creature_spawner.gd: wolves at night (30+ tiles), rabbits day (40–80), birds (20–60), caps + despawn >100 tiles
+  - world/day_night_cycle.gd: 10 min day / 5 min night, get_night_blend + is_night
+  - world/lighting.tscn + lighting.gd: SkyTint for cycle; background.gd: set_cycle_night_factor
+  - simulation/sim_renderer.tscn; player Camera2D current=false for root GameCamera
 IN PROGRESS: —
-BLOCKED ON: All other agents
-EXPORTS: The working game.
+BLOCKED ON: —
+EXPORTS:
+  - Runnable game from res://main.tscn; integration wiring as above
