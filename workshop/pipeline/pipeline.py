@@ -31,6 +31,19 @@ def load_manifest():
     with open(MANIFEST_PATH) as f:
         return json.load(f)
 
+
+def manifest_output_path(info: dict) -> str:
+    """Manifest v2 uses `dest`; v1 used `output`."""
+    return info.get("output") or info.get("dest")
+
+
+def resolve_raw_root(manifest: dict) -> Path:
+    rc = manifest.get("paths", {}).get("raw_characters")
+    if rc:
+        return Path(rc).parent
+    p = manifest.get("raw_assets_path")
+    return Path(p) if p else RAW_PATH
+
 def save_manifest(data):
     with open(MANIFEST_PATH, "w") as f:
         json.dump(data, f, indent=2)
@@ -161,45 +174,74 @@ def audit(manifest: dict):
     print("\nCHARACTERS:")
     for name, data in manifest["characters"].items():
         print(f"  {name} ({data['frame_w']}x{data['frame_h']}):")
-        for frame_id, info in data["frames"].items():
-            raw = RAW_PATH / "characters" / info["file"]
-            valid, msg = validate_png(raw)
-            status = "[OK]" if valid else "[X]"
-            print(f"    {status} {frame_id}: {msg}")
-            if valid: complete += 1
-            else: missing += 1
+        frames = data.get("frames")
+        if isinstance(frames, list):
+            master = data.get("master")
+            if master:
+                raw = RAW_PATH / "characters" / master
+                valid, msg = validate_png(raw)
+                status = "[OK]" if valid else "[X]"
+                print(f"    {status} master {master}: {msg}")
+                if valid:
+                    complete += 1
+                else:
+                    missing += 1
+            for frame_id in frames:
+                print(f"    [.] {frame_id}: (manifest v2 - per-frame files optional until export)")
+        else:
+            for frame_id, info in frames.items():
+                raw = RAW_PATH / "characters" / info["file"]
+                valid, msg = validate_png(raw)
+                status = "[OK]" if valid else "[X]"
+                print(f"    {status} {frame_id}: {msg}")
+                if valid:
+                    complete += 1
+                else:
+                    missing += 1
 
     print("\nTILES:")
     for name, info in manifest["tiles"].items():
         raw = RAW_PATH / "tiles" / info["file"]
         valid, msg = validate_png(raw)
-        print(f"  {'[OK]' if valid else '[X]'} {name}: {msg}")
-        if valid: complete += 1
-        else: missing += 1
+        out = manifest_output_path(info)
+        print(f"  {'[OK]' if valid else '[X]'} {name}: {msg} -> {out}")
+        if valid:
+            complete += 1
+        else:
+            missing += 1
 
     print("\nBACKGROUNDS:")
     for name, info in manifest["backgrounds"].items():
         raw = RAW_PATH / "backgrounds" / info["file"]
         valid, msg = validate_png(raw)
-        print(f"  {'[OK]' if valid else '[X]'} {name}: {msg}")
-        if valid: complete += 1
-        else: missing += 1
+        out = manifest_output_path(info)
+        print(f"  {'[OK]' if valid else '[X]'} {name}: {msg} -> {out}")
+        if valid:
+            complete += 1
+        else:
+            missing += 1
 
     print("\nPOWER STRUCTURES:")
     for name, info in manifest["power"].items():
         raw = RAW_PATH / "power" / info["file"]
         valid, msg = validate_png(raw)
-        print(f"  {'[OK]' if valid else '[X]'} {name}: {msg}")
-        if valid: complete += 1
-        else: missing += 1
+        out = manifest_output_path(info)
+        print(f"  {'[OK]' if valid else '[X]'} {name}: {msg} -> {out}")
+        if valid:
+            complete += 1
+        else:
+            missing += 1
 
     print("\nUI ELEMENTS:")
     for name, info in manifest["ui"].items():
         raw = RAW_PATH / "ui" / info["file"]
         valid, msg = validate_png(raw)
-        print(f"  {'[OK]' if valid else '[X]'} {name}: {msg}")
-        if valid: complete += 1
-        else: missing += 1
+        out = manifest_output_path(info)
+        print(f"  {'[OK]' if valid else '[X]'} {name}: {msg} -> {out}")
+        if valid:
+            complete += 1
+        else:
+            missing += 1
 
     total = complete + missing
     print(f"\nSUMMARY: {complete}/{total} raw assets valid")
@@ -213,29 +255,32 @@ def assemble_all(manifest: dict):
     """Assemble all sprite sheets and copy all simple assets to game/."""
     print("\nAssembling all assets to game/...")
 
-    # Characters → sprite sheets
+    # Characters → sprite sheets (manifest v1: per-frame dict + sheet_layout)
     for name, data in manifest["characters"].items():
-        assemble_character_sheet(name, data)
+        if data.get("sheet_layout") and isinstance(data.get("frames"), dict):
+            assemble_character_sheet(name, data)
+        else:
+            print(f"\n[skip] {name}: manifest v2 master layout - use V2 export or add sheet_layout + frame files")
 
     # Tiles → direct copy
     print("\nCopying tiles...")
     for name, info in manifest["tiles"].items():
-        copy_simple_asset(info["file"], info["output"])
+        copy_simple_asset(info["file"], manifest_output_path(info))
 
     # Backgrounds → direct copy
     print("\nCopying backgrounds...")
     for name, info in manifest["backgrounds"].items():
-        copy_simple_asset(info["file"], info["output"])
+        copy_simple_asset(info["file"], manifest_output_path(info))
 
     # Power structures → direct copy
     print("\nCopying power structures...")
     for name, info in manifest["power"].items():
-        copy_simple_asset(info["file"], info["output"])
+        copy_simple_asset(info["file"], manifest_output_path(info))
 
     # UI elements → direct copy
     print("\nCopying UI elements...")
     for name, info in manifest["ui"].items():
-        copy_simple_asset(info["file"], info["output"])
+        copy_simple_asset(info["file"], manifest_output_path(info))
 
     print("\nAssembly complete. Open Godot to reimport.")
 
@@ -250,9 +295,12 @@ def main():
     args = parser.parse_args()
 
     manifest = load_manifest()
-    if manifest.get("aseprite_path"):
+    if manifest.get("aseprite"):
+        ASEPRITE = Path(manifest["aseprite"])
+    elif manifest.get("aseprite_path"):
         ASEPRITE = Path(manifest["aseprite_path"])
-    if manifest.get("raw_assets_path"):
+    RAW_PATH = resolve_raw_root(manifest)
+    if manifest.get("raw_assets_path") and not manifest.get("paths"):
         RAW_PATH = Path(manifest["raw_assets_path"])
 
     if args.check:
@@ -260,8 +308,10 @@ def main():
     elif args.assemble_only or args.character:
         if args.character:
             char = manifest["characters"].get(args.character)
-            if char:
+            if char and char.get("sheet_layout") and isinstance(char.get("frames"), dict):
                 assemble_character_sheet(args.character, char)
+            elif char:
+                print("Character entry is manifest v2 style; add sheet_layout + per-frame files for assembly.")
             else:
                 print(f"Unknown character: {args.character}")
         else:

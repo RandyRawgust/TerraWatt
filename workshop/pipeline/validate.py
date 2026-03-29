@@ -13,6 +13,9 @@ def check_all():
     errors = []
     ok = []
 
+    def out_path(info):
+        return info.get("output") or info.get("dest")
+
     def check(path_str, expected_w=None, expected_h=None):
         p = Path(path_str)
         if not p.exists():
@@ -31,17 +34,20 @@ def check_all():
         except Exception as e:
             errors.append(f"CORRUPT: {path_str} - {e}")
 
-    # Check character sheets
+    # Check character sheets (manifest v1: output + sheet_layout) or skip v2 master-only entries
     for name, data in manifest["characters"].items():
-        n_frames = len(data["sheet_layout"])
-        expected_w = data["frame_w"] * n_frames
-        expected_h = data["frame_h"]
-        check(data["output"], expected_w, expected_h)
+        layout = data.get("sheet_layout")
+        outp = data.get("output")
+        if layout and outp:
+            n_frames = len(layout)
+            expected_w = data["frame_w"] * n_frames
+            expected_h = data["frame_h"]
+            check(outp, expected_w, expected_h)
 
     # Check tiles, backgrounds, power, ui
     for category in ["tiles", "backgrounds", "power", "ui"]:
         for name, info in manifest[category].items():
-            check(info["output"])
+            check(out_path(info))
 
     print(f"\n[OK] Valid: {len(ok)}")
     for line in ok:

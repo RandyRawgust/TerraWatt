@@ -1,0 +1,41 @@
+[gd_scene load_steps=12 format=3 uid="uid://c6vlgq6mhltfc"]
+
+[ext_resource type="Script" uid="uid://bi8j4f3we6nx7" path="res://main.gd" id="1_main"]
+[ext_resource type="PackedScene" uid="uid://b1g3h5q0c4v3e" path="res://world/background.tscn" id="2_bg"]
+[ext_resource type="PackedScene" uid="uid://i4jsbv6micei" path="res://world/world_renderer.tscn" id="3_wr"]
+[ext_resource type="PackedScene" uid="uid://xhegm4r2hki" path="res://player/player.tscn" id="4_pl"]
+[ext_resource type="PackedScene" uid="uid://byupk0huumkfs" path="res://world/lighting.tscn" id="5_lm"]
+[ext_resource type="PackedScene" uid="uid://bj6fcihiglqti" path="res://simulation/sim_renderer.tscn" id="6_sim"]
+[ext_resource type="PackedScene" uid="uid://bvlccud3y5hyu" path="res://ui/hud.tscn" id="7_hud"]
+[ext_resource type="Script" uid="uid://cy4x7vmndb2ay" path="res://creatures/creature_spawner.gd" id="8_csp"]
+[ext_resource type="Script" uid="uid://cuwul4laa3eml" path="res://world/day_night_cycle.gd" id="9_dnc"]
+[ext_resource type="PackedScene" path="res://world/pollution_overlay.tscn" id="10_po"]
+[ext_resource type="Script" uid="uid://igqeldqts6g3" path="res://world/soot_system.gd" id="11_soot"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="SimRenderer" parent="." instance=ExtResource("6_sim")]
+
+[node name="WorldRenderer" parent="." instance=ExtResource("3_wr")]
+
+[node name="BackgroundLayer" parent="." instance=ExtResource("2_bg")]
+
+[node name="LightingManager" parent="." instance=ExtResource("5_lm")]
+
+[node name="Player" parent="." instance=ExtResource("4_pl")]
+
+[node name="GameCamera" type="Camera2D" parent="."]
+
+[node name="DayNightCycle" type="Node" parent="."]
+script = ExtResource("9_dnc")
+
+[node name="CreatureSpawner" type="Node" parent="."]
+script = ExtResource("8_csp")
+
+[node name="PollutionOverlay" parent="." instance=ExtResource("10_po")]
+
+[node name="SootSystem" type="Node" parent="."]
+script = ExtResource("11_soot")
+
+[node name="HUD" parent="." instance=ExtResource("7_hud")]
