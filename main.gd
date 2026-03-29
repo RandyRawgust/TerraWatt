@@ -4,13 +4,18 @@
 
 extends Node2D
 
+
 func _ready() -> void:
 	print("Terra.Watt — Initializing...")
-	# Systems initialize via their own _ready() calls as autoloads.
-	# Demo inventory so the hotbar shows counts (replace when mining loop is wired).
-	if Inventory.get_count("coal") == 0:
-		Inventory.add_item("coal", 3)
-	print("Terra.Watt — Ready. Open main.tscn in Godot to run.")
+	WorldData.initialize(12345)
+	var cam := $Camera2D as Camera2D
+	var spawn: Vector2 = SpawnLocator.find_spawn_point(200)
+	cam.global_position = spawn
+	var wr := $WorldRenderer as WorldRenderer
+	if wr:
+		wr.set_camera(cam)
+	print("Terra.Watt — Ready. Spawn at ", spawn)
 
-func _process(delta: float) -> void:
+
+func _process(_delta: float) -> void:
 	pass

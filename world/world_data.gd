@@ -22,14 +22,16 @@ const TILE_COAL: int = 4
 const TILE_COPPER_ORE: int = 5
 const TILE_IRON_ORE: int = 6
 const TILE_CLAY: int = 7
+const TILE_WOOD_PLANK: int = 8
+const TILE_STONE_BRICK: int = 9
 
 const SURFACE_Y: int = 0
 const SHALLOW_START_Y: int = 10
 const MID_UNDERGROUND_Y: int = 60
 const DEEP_UNDERGROUND_Y: int = 150
-const ABYSS_Y: int = 280
 
 signal chunk_loaded(chunk_pos: Vector2i)
+signal chunk_unloaded(chunk_pos: Vector2i)
 signal tile_changed(pos: Vector2i, old_id: int, new_id: int)
 
 var terrain_noise: FastNoiseLite
@@ -43,6 +45,10 @@ var loaded_chunks: Dictionary = {}
 var dirty_chunks: Dictionary = {}
 
 var world_seed: int = 0
+
+## terrawatt_tileset: one TileSetAtlasSource per ID; source_id == tile_id - 1 for 1..9.
+static func tile_id_to_source_id(tile_id: int) -> int:
+	return tile_id - 1
 
 
 func _ready() -> void:
@@ -68,8 +74,13 @@ func _init_noise() -> void:
 
 	cave_noise = FastNoiseLite.new()
 	cave_noise.seed = s + 1001
-	cave_noise.noise_type = FastNoiseLite.TYPE_DOMAIN_WARP_OPEN_SIMPLEX_2
+	cave_noise.noise_type = FastNoiseLite.TYPE_PERLIN
 	cave_noise.frequency = 0.03
+	cave_noise.fractal_type = FastNoiseLite.FRACTAL_FBM
+	cave_noise.fractal_octaves = 4
+	cave_noise.domain_warp_enabled = true
+	cave_noise.domain_warp_amplitude = 40.0
+	cave_noise.domain_warp_frequency = 0.015
 
 	ore_noise_coal = FastNoiseLite.new()
 	ore_noise_coal.seed = s + 2002
@@ -153,6 +164,7 @@ func unload_distant_chunks(center_tile_pos: Vector2i, keep_radius: int) -> void:
 		if absi(key.x - cx) > keep_radius or absi(key.y - cy) > keep_radius:
 			to_remove.append(key)
 	for k in to_remove:
+		chunk_unloaded.emit(k)
 		loaded_chunks.erase(k)
 		dirty_chunks.erase(k)
 
@@ -163,8 +175,8 @@ func _generate_chunk(chunk_pos: Vector2i) -> void:
 	var base_x: int = chunk_pos.x * CHUNK_SIZE
 	var base_y: int = chunk_pos.y * CHUNK_SIZE
 
-	for local_y in CHUNK_SIZE:
-		for local_x in CHUNK_SIZE:
+	for local_y in range(CHUNK_SIZE):
+		for local_x in range(CHUNK_SIZE):
 			var world_x: int = base_x + local_x
 			var world_y: int = base_y + local_y
 			var idx: int = local_y * CHUNK_SIZE + local_x

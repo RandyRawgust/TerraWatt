@@ -49,17 +49,25 @@ EXPORTS:
 
 ---
 
-## World Gen Agent — [DATE]
-STATUS: NOT STARTED
-COMPLETED: —
+## World Gen Agent — March 28, 2026
+STATUS: COMPLETE
+COMPLETED:
+  - world_data.gd: FastNoiseLite terrain/caves/ores, 32×32 chunks, load/unload streaming
+  - world_renderer.gd / world_renderer.tscn: TileMap + placeholder atlas (MaterialRegistry colors)
+  - spawn_locator.gd: surface-based spawn in pixel coords
+  - main.tscn wires WorldRenderer + Camera2D; main.gd initializes seed and camera follow
+  - tests/world_gen_test.gd: headless checks (run with Godot -s res://tests/world_gen_test.gd)
 IN PROGRESS: —
-BLOCKED ON: Pixel Sim Agent (SimManager stubs acceptable)
+BLOCKED ON: —
 EXPORTS:
   - autoload: WorldData.get_tile(x, y) → int (tile_id)
   - autoload: WorldData.set_tile(x, y, tile_id)
   - autoload: WorldData.get_surface_y(x) → int
   - signal: WorldData.chunk_loaded(chunk_pos)
+  - signal: WorldData.chunk_unloaded(chunk_pos)
+  - signal: WorldData.tile_changed(pos, old_id, new_id)
   - scene: res://world/world_renderer.tscn
+  - static: SpawnLocator.find_spawn_point(world_x) → Vector2
 
 ---
 
