@@ -1,22 +1,47 @@
-; Engine configuration file — Terra.Watt
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
 [application]
+
 config/name="Terra.Watt"
 config/description="2D infinite sandbox power generation game"
 run/main_scene="res://main.tscn"
-config/features=PackedStringArray("4.3", "GL Compatibility")
+config/features=PackedStringArray("4.4", "GL Compatibility")
 
 [autoload]
+
 SimManager="*res://simulation/sim_manager.gd"
 WorldData="*res://world/world_data.gd"
 Inventory="*res://player/inventory.gd"
 PowerGrid="*res://power/power_grid.gd"
 MaterialRegistry="*res://simulation/material_registry.gd"
 
-[rendering]
-renderer/rendering_method="gl_compatibility"
-textures/canvas_textures/default_texture_filter=0
-
 [display]
-window/size/viewport_width=1920
-window/size/viewport_height=1080
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/size/window_width_override=1280
+window/size/window_height_override=720
 window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
+
+[gdextension]
+
+# terrawatt_sim disabled until C++ is compiled
+# path = "res://simulation/gdextension/terrawatt_sim.gdextension"
+
+[dotnet]
+
+project/assembly_name="Terra.Watt"
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+renderer/rendering_method="gl_compatibility"

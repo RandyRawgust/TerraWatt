@@ -40,5 +40,7 @@ func _physics_process(delta: float) -> void:
 		spr.play("idle")
 	if abs(velocity.x) > 8.0:
 		spr.flip_h = velocity.x < 0
+	if has_node("Silhouette"):
+		$Silhouette.scale.x = -1.0 if spr.flip_h else 1.0
 
 	move_and_slide()

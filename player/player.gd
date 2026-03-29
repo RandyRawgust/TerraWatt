@@ -42,9 +42,21 @@ func _on_collectible_item_collected(item_type: String) -> void:
 
 
 func _setup_sprite_frames() -> void:
-	var tex: Texture2D = load("res://assets/player/player_frames.png") as Texture2D
+	const PLAYER_TEX: String = "res://assets/player/player_frames.png"
+	if not ResourceLoader.exists(PLAYER_TEX):
+		# Temporary placeholder until PixelLab sprites are generated
+		var placeholder := PlaceholderTexture2D.new()
+		placeholder.size = Vector2(24, 40)
+		var sf_p := SpriteFrames.new()
+		for anim_name in ["idle", "jump", "walk"]:
+			sf_p.add_animation(anim_name)
+			sf_p.set_animation_loop(anim_name, true)
+			sf_p.add_frame(anim_name, placeholder, 1.0)
+		sprite.sprite_frames = sf_p
+		return
+	var tex: Texture2D = load(PLAYER_TEX) as Texture2D
 	if tex == null:
-		push_error("Player: could not load res://assets/player/player_frames.png")
+		push_error("Player: could not load %s" % PLAYER_TEX)
 		return
 	var sf := SpriteFrames.new()
 	sf.add_animation("idle")
@@ -80,7 +92,11 @@ func _physics_process(delta: float) -> void:
 
 
 func _handle_movement(delta: float) -> void:
-	var direction: float = Input.get_axis("ui_left", "ui_right")
+	var direction: float = 0.0
+	if Input.is_action_pressed("ui_left") or Input.is_key_pressed(KEY_A):
+		direction = -1.0
+	if Input.is_action_pressed("ui_right") or Input.is_key_pressed(KEY_D):
+		direction = 1.0
 	if direction != 0:
 		facing_right = direction > 0
 		sprite.flip_h = !facing_right
@@ -93,7 +109,10 @@ func _handle_movement(delta: float) -> void:
 
 
 func _handle_jump() -> void:
-	if Input.is_action_just_pressed("ui_accept") and is_on_ground:
+	var jump: bool = Input.is_action_just_pressed("ui_accept") \
+			or Input.is_key_just_pressed(KEY_W) \
+			or Input.is_key_just_pressed(KEY_SPACE)
+	if jump and is_on_ground:
 		velocity.y = JUMP_VELOCITY
 
 

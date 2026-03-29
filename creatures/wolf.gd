@@ -35,6 +35,8 @@ func _physics_process(delta: float) -> void:
 		spr.play("idle")
 	if _target:
 		spr.flip_h = _target.global_position.x < global_position.x
+	if has_node("Silhouette"):
+		$Silhouette.scale.x = -1.0 if spr.flip_h else 1.0
 
 
 func _seek_target() -> void:

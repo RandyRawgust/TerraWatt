@@ -24,6 +24,8 @@ func _process(delta: float) -> void:
 
 	var spr: AnimatedSprite2D = $AnimatedSprite2D
 	spr.flip_h = global_position.x > _target_x
+	if has_node("Silhouette"):
+		$Silhouette.scale.x = -1.0 if spr.flip_h else 1.0
 
 	if abs(global_position.x - _target_x) < 6.0:
 		_pick_target()
