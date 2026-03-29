@@ -27,7 +27,7 @@ func _process(delta: float) -> void:
 	global_position.y = _anchor_y + sin(_flutter_phase) * 4.0
 	global_position.x = move_toward(global_position.x, _target_x, FLY_SPEED * delta)
 
-	if absf(global_position.x - _target_x) < 6.0:
+	if abs(global_position.x - _target_x) < 6.0:
 		_pick_target()
 
 	var cam: Camera2D = get_viewport().get_camera_2d()

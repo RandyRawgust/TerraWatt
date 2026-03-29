@@ -40,7 +40,7 @@ func set_player_light(light: PointLight2D) -> void:
 
 
 func set_cycle_night_factor(f: float) -> void:
-	_cycle_night_factor = clampf(f, 0.0, 1.0)
+	_cycle_night_factor = clamp(f, 0.0, 1.0)
 
 
 func _process(_delta: float) -> void:

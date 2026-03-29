@@ -15,7 +15,7 @@ func _exit_tree() -> void:
 	PowerGrid.unregister_source(self)
 
 func set_output(watts: float) -> void:
-	current_output_watts = clampf(watts, 0.0, max_output_watts)
+	current_output_watts = clamp(watts, 0.0, max_output_watts)
 	PowerGrid.update_source_output(self, current_output_watts)
 	is_operating = current_output_watts > 0.0
 

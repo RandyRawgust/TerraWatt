@@ -37,7 +37,7 @@ func _apply_icon() -> void:
 
 func _process(delta: float) -> void:
 	_time += delta
-	global_position.y = _base_y + sinf(_time * 3.0) * 3.0
+	global_position.y = _base_y + sin(_time * 3.0) * 3.0
 
 
 func _on_body_entered(body: Node2D) -> void:

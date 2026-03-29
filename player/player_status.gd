@@ -40,7 +40,7 @@ func _check_environment() -> void:
 func _apply_status_effects(delta: float) -> void:
 	if is_on_fire:
 		health -= FIRE_DAMAGE_RATE * delta
-		health = maxf(health, 0.0)
+		health = max(health, 0.0)
 	if air_level <= 0.0:
 		health -= 5.0 * delta
 
@@ -48,9 +48,9 @@ func _apply_status_effects(delta: float) -> void:
 func _update_air(delta: float) -> void:
 	if is_suffocating:
 		air_level -= AIR_DRAIN_RATE * delta
-		air_level = maxf(air_level, 0.0)
+		air_level = max(air_level, 0.0)
 	else:
-		air_level = minf(air_level + AIR_REFILL_RATE * delta, 1.0)
+		air_level = min(air_level + AIR_REFILL_RATE * delta, 1.0)
 
 
 signal status_changed(wet: bool, on_fire: bool, suffocating: bool, air: float, health: float)

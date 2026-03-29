@@ -46,4 +46,4 @@ func _measure_water_flow() -> float:
 			var cell: Dictionary = SimManager.get_cell(my_tile.x + dx, my_tile.y + dy)
 			if int(cell.get("material_id", 0)) == MaterialRegistry.MAT_WATER:
 				water_cells += 1
-	return clampf(float(water_cells) / 8.0, 0.0, 1.0)
+	return clamp(float(water_cells) / 8.0, 0.0, 1.0)

@@ -34,7 +34,7 @@ func _physics_process(delta: float) -> void:
 		return
 
 	var wind_strength: float = _calculate_wind()
-	set_output(lerpf(MIN_OUTPUT, MAX_OUTPUT, wind_strength))
+	set_output(lerp(MIN_OUTPUT, MAX_OUTPUT, wind_strength))
 	if blade_sprite:
 		blade_sprite.speed_scale = get_output_fraction() * 3.0
 		if not blade_sprite.is_playing():
@@ -51,4 +51,4 @@ func _is_surface_placement_valid() -> bool:
 func _calculate_wind() -> float:
 	var base_wind: float = (sin(_wind_time * TAU / WIND_CYCLE) + 1.0) / 2.0
 	var noise_offset: float = sin(_wind_time * 7.3) * 0.1
-	return clampf(base_wind + noise_offset, 0.0, 1.0)
+	return clamp(base_wind + noise_offset, 0.0, 1.0)

@@ -84,9 +84,9 @@ func _handle_movement(delta: float) -> void:
 	if direction != 0:
 		facing_right = direction > 0
 		sprite.flip_h = !facing_right
-		if absf(velocity.x) < WALK_SPEED:
+		if abs(velocity.x) < WALK_SPEED:
 			velocity.x += direction * ACCELERATION * delta
-			velocity.x = clampf(velocity.x, -WALK_SPEED, WALK_SPEED)
+			velocity.x = clamp(velocity.x, -WALK_SPEED, WALK_SPEED)
 	else:
 		var friction_amount: float = (FRICTION if is_on_ground else AIR_RESISTANCE) * delta
 		velocity.x = move_toward(velocity.x, 0.0, friction_amount)
@@ -107,7 +107,7 @@ func _apply_gravity(delta: float) -> void:
 func _update_animation() -> void:
 	if not is_on_ground:
 		sprite.play("jump")
-	elif absf(velocity.x) > 10.0:
+	elif abs(velocity.x) > 10.0:
 		sprite.play("walk")
 	else:
 		sprite.play("idle")

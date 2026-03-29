@@ -40,7 +40,7 @@ func _tick_burn(delta: float) -> void:
 			wood_fuel -= 1.0
 			_burn_timer = 0.0
 		water_level -= WATER_CONSUME_RATE * delta
-		water_level = maxf(water_level, 0.0)
+		water_level = max(water_level, 0.0)
 		set_output(FULL_OUTPUT)
 		var ex: int = int(smoke_emit_pos.global_position.x / 16.0)
 		var ey: int = int(smoke_emit_pos.global_position.y / 16.0)
@@ -60,4 +60,4 @@ func add_wood(amount: float) -> void:
 
 
 func add_water(amount: float) -> void:
-	water_level = minf(water_level + amount, 10.0)
+	water_level = min(water_level + amount, 10.0)

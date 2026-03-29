@@ -18,7 +18,7 @@ const _NIGHT_MOD: Color = Color(0.62, 0.7, 0.92, 1.0)
 
 
 func set_cycle_night_factor(f: float) -> void:
-	var t: float = clampf(f, 0.0, 1.0)
+	var t: float = clamp(f, 0.0, 1.0)
 	var c: Color = _DAY_MOD.lerp(_NIGHT_MOD, t)
 	for spr: Sprite2D in [layer_far, layer_mid, layer_near]:
 		if spr != null:
