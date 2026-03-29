@@ -7,7 +7,9 @@ extends EditorScript
 
 const TILE_SIZE: Vector2i = Vector2i(16, 16)
 
-# Order: WorldData tile_id 1..9 → texture path (source_id = tile_id - 1)
+# WorldData tile_id → PNG (source_id = tile_id - 1). Must stay in sync with world_data.gd.
+# TILE_DIRT=1, TILE_STONE=2, TILE_GRASS_DIRT=3, TILE_COAL=4, TILE_COPPER_ORE=5,
+# TILE_IRON_ORE=6, TILE_CLAY=7, TILE_WOOD_PLANK=8, TILE_STONE_BRICK=9
 const _SOURCES: Array[String] = [
 	"res://assets/tiles/terrain/dirt.png",
 	"res://assets/tiles/terrain/stone.png",
