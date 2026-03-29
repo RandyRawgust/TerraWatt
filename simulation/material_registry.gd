@@ -5,8 +5,6 @@
 
 extends Node
 
-class_name MaterialRegistry
-
 # Material IDs — match WorldData tile constants
 const MAT_AIR: int = 0
 const MAT_DIRT: int = 1

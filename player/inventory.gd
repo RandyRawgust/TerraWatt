@@ -4,8 +4,6 @@
 
 extends Node
 
-class_name Inventory
-
 # item_name (String) → count (int)
 var items: Dictionary = {}
 

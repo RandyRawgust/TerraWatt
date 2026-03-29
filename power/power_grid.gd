@@ -5,8 +5,6 @@
 
 extends Node
 
-class_name PowerGrid
-
 signal power_updated(generation: float, demand: float)
 
 # All registered sources: node → { watts: float, position: Vector2 }

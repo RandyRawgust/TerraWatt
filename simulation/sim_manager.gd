@@ -4,8 +4,6 @@
 
 extends Node
 
-class_name SimManager
-
 var _sim_node: Node = null
 var _is_loaded: bool = false
 
