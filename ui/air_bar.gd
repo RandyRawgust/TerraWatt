@@ -17,9 +17,15 @@ func _ready() -> void:
 func _connect_status() -> void:
 	var player: Node = get_tree().get_first_node_in_group("player")
 	if player and player.has_node("PlayerStatus"):
-		var ps: PlayerStatus = player.get_node("PlayerStatus") as PlayerStatus
-		ps.status_changed.connect(_on_status_changed)
-		_on_status_changed(ps.wet, ps.on_fire, ps.suffocating, ps.air, ps.health)
+		var ps: Node = player.get_node("PlayerStatus")
+		ps.connect("status_changed", Callable(self, "_on_status_changed"))
+		_on_status_changed(
+			bool(ps.get("is_wet")),
+			bool(ps.get("is_on_fire")),
+			bool(ps.get("is_suffocating")),
+			float(ps.get("air_level")),
+			float(ps.get("health"))
+		)
 
 
 func _on_status_changed(_wet: bool, _on_fire: bool, _suff: bool, air: float, _health: float) -> void:

@@ -30,7 +30,7 @@ var current_tool: String = "hammer"
 func _ready() -> void:
 	add_to_group("player")
 	_setup_sprite_frames()
-	mining_system.tile_mined.connect(_on_mining_tile_mined)
+	mining_system.connect("tile_mined", Callable(self, "_on_mining_tile_mined"))
 
 
 func _on_mining_tile_mined(tile_pos: Vector2i, tile_id: int) -> void:
@@ -126,4 +126,4 @@ func get_world_tile_pos() -> Vector2i:
 
 func set_tool(tool_name: String) -> void:
 	current_tool = tool_name
-	mining_system.set_active_tool(tool_name)
+	mining_system.call("set_active_tool", tool_name)

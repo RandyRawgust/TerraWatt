@@ -32,11 +32,11 @@ func _ready() -> void:
 	game_camera.global_position = player.global_position
 
 	if world_renderer.has_method("set_camera"):
-		world_renderer.set_camera(game_camera)
+		world_renderer.call("set_camera", game_camera)
 
 	var player_light: PointLight2D = player.get_node_or_null("Headlamp") as PointLight2D
 	if player_light:
-		lighting_manager.set_player_light(player_light)
+		lighting_manager.call("set_player_light", player_light)
 
 	# StatusIconBar connects to PlayerStatus in its _ready (deferred).
 
@@ -46,15 +46,15 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	background_layer.update_parallax(game_camera.global_position)
+	background_layer.call("update_parallax", game_camera.global_position)
 
 	var nb: float = 0.0
 	if day_night_cycle != null and day_night_cycle.has_method("get_night_blend"):
 		nb = float(day_night_cycle.call("get_night_blend"))
 	if lighting_manager.has_method("set_cycle_night_factor"):
-		lighting_manager.set_cycle_night_factor(nb)
+		lighting_manager.call("set_cycle_night_factor", nb)
 	if background_layer.has_method("set_cycle_night_factor"):
-		background_layer.set_cycle_night_factor(nb)
+		background_layer.call("set_cycle_night_factor", nb)
 
 	game_camera.global_position = game_camera.global_position.lerp(
 		player.global_position, delta * 8.0

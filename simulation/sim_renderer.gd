@@ -20,8 +20,8 @@ func _ready() -> void:
 func _rebuild_texture() -> void:
 	if _sim == null:
 		return
-	var w: int = _sim.get_sim_width()
-	var h: int = _sim.get_sim_height()
+	var w: int = int(_sim.call("get_sim_width"))
+	var h: int = int(_sim.call("get_sim_height"))
 	if w <= 0 or h <= 0:
 		return
 	_image = Image.create(w, h, false, Image.FORMAT_RGBA8)
@@ -31,8 +31,8 @@ func _rebuild_texture() -> void:
 func _physics_process(_delta: float) -> void:
 	if _sim == null:
 		return
-	var w: int = _sim.get_sim_width()
-	var h: int = _sim.get_sim_height()
+	var w: int = int(_sim.call("get_sim_width"))
+	var h: int = int(_sim.call("get_sim_height"))
 	if w <= 0 or h <= 0:
 		return
 	if _image == null or _image.get_width() != w or _image.get_height() != h:
@@ -41,7 +41,8 @@ func _physics_process(_delta: float) -> void:
 			return
 	for y in h:
 		for x in w:
-			var mid: int = int(_sim.get_cell(x, y).get("material_id", 0))
+			var cell: Dictionary = _sim.call("get_cell", x, y) as Dictionary
+			var mid: int = int(cell.get("material_id", 0))
 			var c: Color = MaterialRegistry.get_color(mid)
 			_image.set_pixel(x, y, c)
 	_tex.update(_image)

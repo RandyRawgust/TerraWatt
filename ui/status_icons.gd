@@ -22,7 +22,8 @@ func _ready() -> void:
 func _connect_to_player() -> void:
 	var player: Node = get_tree().get_first_node_in_group("player")
 	if player and player.has_node("PlayerStatus"):
-		player.get_node("PlayerStatus").status_changed.connect(_on_status_changed)
+		var ps: Node = player.get_node("PlayerStatus")
+		ps.connect("status_changed", Callable(self, "_on_status_changed"))
 
 
 func _process(_delta: float) -> void:

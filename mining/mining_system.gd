@@ -83,7 +83,7 @@ func _start_mining(tile_pos: Vector2i) -> void:
 
 func _continue_mining(delta: float) -> void:
 	_mine_progress += delta
-	_progress_indicator.set_progress(_mine_progress / _mine_duration)
+	_progress_indicator.call("set_progress", _mine_progress / _mine_duration)
 	if _mine_progress >= _mine_duration:
 		_complete_mining()
 
@@ -110,15 +110,14 @@ func _apply_tool_bonus(base_time: float) -> float:
 func _spawn_collectible(tile_pos: Vector2i, tile_id: int, item_type: String) -> void:
 	var collectible_scene: PackedScene = preload("res://mining/collectible_item.tscn")
 	var item: Node2D = collectible_scene.instantiate()
-	item.item_type = item_type
-	item.source_tile_id = tile_id
+	item.set("item_type", item_type)
+	item.set("source_tile_id", tile_id)
 	item.global_position = Vector2(tile_pos) * WorldData.TILE_SIZE + Vector2(
 		float(WorldData.TILE_SIZE) * 0.5,
 		float(WorldData.TILE_SIZE) * 0.5
 	)
-	var player: Player = _player as Player
-	if player:
-		item.item_collected.connect(player._on_collectible_item_collected)
+	if _player:
+		item.connect("item_collected", Callable(_player, "_on_collectible_item_collected"))
 	get_tree().current_scene.add_child(item)
 
 
