@@ -11,6 +11,25 @@ If you are blocked, say so here — do not just sit idle.
 
 ---
 
+## Preflight Agent (Tier 1) — March 29, 2026
+STATUS: COMPLETE
+COMPLETED:
+  - RigidBody2D sleeping bug fixed (collectibles fall into holes)
+  - Creature CharacterBody2D gravity and move_and_slide unified (wolf, rabbit; bird stays Node2D aerial)
+  - GDExtension built Windows x86_64 debug — DLL at res://bin/ (local artifact, gitignored); terrawatt_sim.gdextension committed
+  - Static tile_id_to_source_id and TileMap set_cell atlas coords already correct in world_renderer.gd / world_data.gd (no code change)
+  - project.godot [gdextension] singletons entry restored after build
+IN PROGRESS: —
+BLOCKED ON: —
+EXPORTS:
+  - SimManager is REAL when `libterrawatt_sim.windows.template_debug.x86_64.dll` is present: get_cell() returns C++ sim state; add_particle / set_cell forward to TerrawattSimNode
+  - Build: from repo root, `py -3 -m pip install scons` then `cd simulation/gdextension` and `py -3 -m SCons platform=windows target=template_debug arch=x86_64`
+  - Godot F5 verification not run in agent shell; confirm locally: SimManager prints C++ extension loaded successfully
+NOTE:
+  - Tier 1 agents that read SimManager can use meaningful sim data after building the DLL (macOS/Linux: add matching .gdextension library lines and compile on those platforms).
+
+---
+
 ## Foundation Agent — March 28, 2026
 STATUS: COMPLETE
 COMPLETED:
